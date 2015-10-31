@@ -11,7 +11,7 @@
 		 <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
 		 
 		 <?php if (!empty($blocks)): ?>
-		 <li><a href="#" data-button="remove-selected"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Block:Admin:Browser@deleteSelectedAction'); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
 		 <?php else: ?>
 		 
 		 <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
