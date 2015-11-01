@@ -15,43 +15,43 @@ use Block\Storage\BlockMapperInterface;
 
 final class SiteService implements SiteServiceInterface
 {
-	/**
-	 * Any compliant block mapper
-	 * 
-	 * @var \Block\Storage\BlockMapperInterface
-	 */
-	private $blockMapper;
+    /**
+     * Any compliant block mapper
+     * 
+     * @var \Block\Storage\BlockMapperInterface
+     */
+    private $blockMapper;
 
-	/**
-	 * State initialization
-	 * 
-	 * @param \Block\Storage\BlockMapperInterface $blockMapper
-	 * @return void
-	 */
-	public function __construct(BlockMapperInterface $blockMapper)
-	{
-		$this->blockMapper = $blockMapper;
-	}
+    /**
+     * State initialization
+     * 
+     * @param \Block\Storage\BlockMapperInterface $blockMapper
+     * @return void
+     */
+    public function __construct(BlockMapperInterface $blockMapper)
+    {
+        $this->blockMapper = $blockMapper;
+    }
 
-	/**
-	 * Returns block name by its associated class name
-	 * 
-	 * @param string $class
-	 * @return string
-	 */
-	public function getNameByClass($class)
-	{
-		return $this->blockMapper->fetchNameByClass($class);
-	}
+    /**
+     * Returns block name by its associated class name
+     * 
+     * @param string $class
+     * @return string
+     */
+    public function getNameByClass($class)
+    {
+        return $this->blockMapper->fetchNameByClass($class);
+    }
 
-	/**
-	 * Renders a block
-	 * 
-	 * @param string $class Block's class name
-	 * @return string
-	 */
-	public function render($class)
-	{
-		return $this->blockMapper->fetchContentByClass($class);
-	}
+    /**
+     * Renders a block
+     * 
+     * @param string $class Block's class name
+     * @return string
+     */
+    public function render($class)
+    {
+        return $this->blockMapper->fetchContentByClass($class);
+    }
 }

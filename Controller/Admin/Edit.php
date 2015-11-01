@@ -13,50 +13,50 @@ namespace Block\Controller\Admin;
 
 final class Edit extends AbstractBlock
 {
-	/**
-	 * Shows edit form
-	 * 
-	 * @param string $id Block id
-	 * @return string
-	 */
-	public function indexAction($id)
-	{
-		$block = $this->getBlockManager()->fetchById($id);
+    /**
+     * Shows edit form
+     * 
+     * @param string $id Block id
+     * @return string
+     */
+    public function indexAction($id)
+    {
+        $block = $this->getBlockManager()->fetchById($id);
 
-		if ($block !== false) {
-			$this->loadSharedPlugins();
+        if ($block !== false) {
+            $this->loadSharedPlugins();
 
-			return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-				'title' => 'Edit the block',
-				'block' => $block
-			)));
+            return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+                'title' => 'Edit the block',
+                'block' => $block
+            )));
 
-		} else {
+        } else {
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 
-	/**
-	 * Updates a block
-	 * 
-	 * @return string
-	 */
-	public function updateAction()
-	{
-		$formValidator = $this->getValidator($this->request->getPost('block'));
+    /**
+     * Updates a block
+     * 
+     * @return string
+     */
+    public function updateAction()
+    {
+        $formValidator = $this->getValidator($this->request->getPost('block'));
 
-		if ($formValidator->isValid()) {
+        if ($formValidator->isValid()) {
 
-			if ($this->getBlockManager()->update($this->request->getPost('block'))) {
+            if ($this->getBlockManager()->update($this->request->getPost('block'))) {
 
-				$this->flashBag->set('success', 'A block has been updated successfully');
-				return '1';
-			}
+                $this->flashBag->set('success', 'A block has been updated successfully');
+                return '1';
+            }
 
-		} else {
+        } else {
 
-			return $formValidator->getErrors();
-		}
-	}
+            return $formValidator->getErrors();
+        }
+    }
 }

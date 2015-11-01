@@ -13,19 +13,19 @@ namespace Block\Service;
 
 interface SiteServiceInterface
 {
-	/**
-	 * Returns block name by its associated class name
-	 * 
-	 * @param string $class
-	 * @return string
-	 */
-	public function getNameByClass($class);
+    /**
+     * Returns block name by its associated class name
+     * 
+     * @param string $class
+     * @return string
+     */
+    public function getNameByClass($class);
 
-	/**
-	 * Renders a block
-	 * 
-	 * @param string $class Block's class name
-	 * @return string
-	 */
-	public function render($class);
+    /**
+     * Renders a block
+     * 
+     * @param string $class Block's class name
+     * @return string
+     */
+    public function render($class);
 }

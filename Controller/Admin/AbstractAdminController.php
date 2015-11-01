@@ -15,13 +15,13 @@ use Cms\Controller\Admin\AbstractController;
 
 abstract class AbstractAdminController extends AbstractController
 {
-	/**
-	 * Returns block manager
-	 * 
-	 * @return \Block\Service\BlockManager
-	 */
-	final protected function getBlockManager()
-	{
-		return $this->getModuleService('blockManager');
-	}
+    /**
+     * Returns block manager
+     * 
+     * @return \Block\Service\BlockManager
+     */
+    final protected function getBlockManager()
+    {
+        return $this->getModuleService('blockManager');
+    }
 }

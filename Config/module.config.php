@@ -10,11 +10,11 @@
  */
 
 return array(
-	'module' => array(
-		'url'	=> '/admin/module/block',
-		'icon'	=> '/module/Block/Assets/block.png',
-		'name'	=> 'HTML Blocks',
-		'order' => 1,
-		'description' => 'HTML Blocks module allows you to dynamically handle HTML blocks'
-	)
+    'module' => array(
+        'url'   => '/admin/module/block',
+        'icon'  => '/module/Block/Assets/block.png',
+        'name'  => 'HTML Blocks',
+        'order' => 1,
+        'description' => 'HTML Blocks module allows you to dynamically handle HTML blocks'
+    )
 );

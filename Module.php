@@ -17,16 +17,16 @@ use Block\Service\SiteService;
 
 final class Module extends AbstractCmsModule
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getServiceProviders()
-	{
-		$blockMapper = $this->getMapper('/Block/Storage/MySQL/BlockMapper');
+    /**
+     * {@inheritDoc}
+     */
+    public function getServiceProviders()
+    {
+        $blockMapper = $this->getMapper('/Block/Storage/MySQL/BlockMapper');
 
-		return array(
-			'siteService' => new SiteService($blockMapper),
-			'blockManager' => new BlockManager($blockMapper, $this->getHistoryManager())
-		);
-	}
+        return array(
+            'siteService' => new SiteService($blockMapper),
+            'blockManager' => new BlockManager($blockMapper, $this->getHistoryManager())
+        );
+    }
 }

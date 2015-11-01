@@ -16,150 +16,150 @@ use Block\Storage\BlockMapperInterface;
 
 final class BlockMapper extends AbstractMapper implements BlockMapperInterface
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public static function getTableName()
-	{
-		return 'bono_module_block';
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public static function getTableName()
+    {
+        return 'bono_module_block';
+    }
 
-	/**
-	 * Fetches block's name by its associated class name
-	 * 
-	 * @param string $name
-	 * @return string
-	 */
-	public function fetchNameByClass($class)
-	{
-		return $this->fetchColumnByClass('name', $class);
-	}
+    /**
+     * Fetches block's name by its associated class name
+     * 
+     * @param string $name
+     * @return string
+     */
+    public function fetchNameByClass($class)
+    {
+        return $this->fetchColumnByClass('name', $class);
+    }
 
-	/**
-	 * Fetches block's content by its associated class name
-	 * 
-	 * @param string $class
-	 * @return string
-	 */
-	public function fetchContentByClass($class)
-	{
-		return $this->fetchColumnByClass('content', $class);
-	}
+    /**
+     * Fetches block's content by its associated class name
+     * 
+     * @param string $class
+     * @return string
+     */
+    public function fetchContentByClass($class)
+    {
+        return $this->fetchColumnByClass('content', $class);
+    }
 
-	/**
-	 * Fetches column's value by associated class
-	 * 
-	 * @param string $column Column to be fetched
-	 * @param string $class Associated class name
-	 * @return string
-	 */
-	private function fetchColumnByClass($column, $class)
-	{
-		return $this->db->select($column)
-						->from(static::getTableName())
-						->whereEquals('class', $class)
-						->andWhereEquals('lang_id', $this->getLangId())
-						->query($column);
-	}
+    /**
+     * Fetches column's value by associated class
+     * 
+     * @param string $column Column to be fetched
+     * @param string $class Associated class name
+     * @return string
+     */
+    private function fetchColumnByClass($column, $class)
+    {
+        return $this->db->select($column)
+                        ->from(static::getTableName())
+                        ->whereEquals('class', $class)
+                        ->andWhereEquals('lang_id', $this->getLangId())
+                        ->query($column);
+    }
 
-	/**
-	 * Fetches block name by its associated id
-	 * 
-	 * @param string $id
-	 * @return string
-	 */
-	public function fetchNameById($id)
-	{
-		return $this->findColumnByPk($id, 'name');
-	}
+    /**
+     * Fetches block name by its associated id
+     * 
+     * @param string $id
+     * @return string
+     */
+    public function fetchNameById($id)
+    {
+        return $this->findColumnByPk($id, 'name');
+    }
 
-	/**
-	 * Fetches block data by its associated class name
-	 * 
-	 * @param string $class Block's class name
-	 * @return array
-	 */
-	public function fetchByClass($class)
-	{
-		return $this->db->select('*')
-						->from(static::getTableName())
-						->whereEquals('class', $class)
-						->andWhereEquals('lang_id', $this->getLangId())
-						->query();
-	}
+    /**
+     * Fetches block data by its associated class name
+     * 
+     * @param string $class Block's class name
+     * @return array
+     */
+    public function fetchByClass($class)
+    {
+        return $this->db->select('*')
+                        ->from(static::getTableName())
+                        ->whereEquals('class', $class)
+                        ->andWhereEquals('lang_id', $this->getLangId())
+                        ->query();
+    }
 
-	/**
-	 * Fetches all blocks
-	 * 
-	 * @return array
-	 */
-	public function fetchAll()
-	{
-		return $this->db->select('*')
-						->from(static::getTableName())
-						->whereEquals('lang_id', $this->getLangId())
-						->queryAll();
-	}
+    /**
+     * Fetches all blocks
+     * 
+     * @return array
+     */
+    public function fetchAll()
+    {
+        return $this->db->select('*')
+                        ->from(static::getTableName())
+                        ->whereEquals('lang_id', $this->getLangId())
+                        ->queryAll();
+    }
 
-	/**
-	 * Fetches all blocks filtered by pagination
-	 * 
-	 * @param integer $page Current page
-	 * @param integer $itemsPerPage Per page count
-	 * @return array
-	 */
-	public function fetchAllByPage($page, $itemsPerPage)
-	{
-		return $this->db->select('*')
-						->from(static::getTableName())
-						->whereEquals('lang_id', $this->getLangId())
-						->orderBy('id')
-						->desc()
-						->paginate($page, $itemsPerPage)
-						->queryAll();
-	}
+    /**
+     * Fetches all blocks filtered by pagination
+     * 
+     * @param integer $page Current page
+     * @param integer $itemsPerPage Per page count
+     * @return array
+     */
+    public function fetchAllByPage($page, $itemsPerPage)
+    {
+        return $this->db->select('*')
+                        ->from(static::getTableName())
+                        ->whereEquals('lang_id', $this->getLangId())
+                        ->orderBy('id')
+                        ->desc()
+                        ->paginate($page, $itemsPerPage)
+                        ->queryAll();
+    }
 
-	/**
-	 * Fetches block data by its associated id
-	 * 
-	 * @param string $id Block id
-	 * @return array
-	 */
-	public function fetchById($id)
-	{
-		return $this->findByPk($id);
-	}
+    /**
+     * Fetches block data by its associated id
+     * 
+     * @param string $id Block id
+     * @return array
+     */
+    public function fetchById($id)
+    {
+        return $this->findByPk($id);
+    }
 
-	/**
-	 * Inserts block's data
-	 * 
-	 * @param array $input Raw input data
-	 * @return boolean
-	 */
-	public function insert(array $input)
-	{
-		return $this->persist($this->getWithLang($input));
-	}
+    /**
+     * Inserts block's data
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function insert(array $input)
+    {
+        return $this->persist($this->getWithLang($input));
+    }
 
-	/**
-	 * Updates block's data
-	 * 
-	 * @param array $input Raw input data
-	 * @return boolean
-	 */
-	public function update(array $input)
-	{
-		return $this->persist($input);
-	}
+    /**
+     * Updates block's data
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function update(array $input)
+    {
+        return $this->persist($input);
+    }
 
-	/**
-	 * Deletes a block by its associated id
-	 * 
-	 * @param string $id
-	 * @return boolean
-	 */
-	public function deleteById($id)
-	{
-		return $this->deleteByPk($id);
-	}
+    /**
+     * Deletes a block by its associated id
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->deleteByPk($id);
+    }
 }

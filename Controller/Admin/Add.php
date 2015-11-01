@@ -15,42 +15,42 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class Add extends AbstractBlock
 {
-	/**
-	 * Shows adding form
-	 * 
-	 * @return string
-	 */
-	public function indexAction()
-	{
-		$this->loadSharedPlugins();
+    /**
+     * Shows adding form
+     * 
+     * @return string
+     */
+    public function indexAction()
+    {
+        $this->loadSharedPlugins();
 
-		return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-			'block' => new VirtualEntity(),
-			'title' => 'Add a block'
-		)));
-	}
+        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+            'block' => new VirtualEntity(),
+            'title' => 'Add a block'
+        )));
+    }
 
-	/**
-	 * Adds a block
-	 * 
-	 * @return string
-	 */
-	public function addAction()
-	{
-		$formValidator = $this->getValidator($this->request->getPost('block'));
+    /**
+     * Adds a block
+     * 
+     * @return string
+     */
+    public function addAction()
+    {
+        $formValidator = $this->getValidator($this->request->getPost('block'));
 
-		if ($formValidator->isValid()) {
+        if ($formValidator->isValid()) {
 
-			$blockManager = $this->getBlockManager();
+            $blockManager = $this->getBlockManager();
 
-			if ($blockManager->add($this->request->getPost('block'))) {
+            if ($blockManager->add($this->request->getPost('block'))) {
 
-				$this->flashBag->set('success', 'A block has been created successfully');
-				return $blockManager->getLastId();
-			}
+                $this->flashBag->set('success', 'A block has been created successfully');
+                return $blockManager->getLastId();
+            }
 
-		} else {
-			return $formValidator->getErrors();
-		}
-	}
+        } else {
+            return $formValidator->getErrors();
+        }
+    }
 }

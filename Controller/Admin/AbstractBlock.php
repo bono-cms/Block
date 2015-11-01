@@ -15,68 +15,68 @@ use Krystal\Validate\Pattern;
 
 abstract class AbstractBlock extends AbstractAdminController
 {
-	/**
-	 * Returns prepared and configured validator's instance
-	 * 
-	 * @param array $input Raw input data
-	 * @return \Krystal\Validate\ValidatorChain
-	 */
-	final protected function getValidator(array $input)
-	{
-		return $this->validatorFactory->build(array(
-			'input' => array(
-				'source' => $input,
-				'definition' => array(
-					'name' => new Pattern\Name(),
-					'content' => new Pattern\Content()
-				)
-			)
-		));
-	}
+    /**
+     * Returns prepared and configured validator's instance
+     * 
+     * @param array $input Raw input data
+     * @return \Krystal\Validate\ValidatorChain
+     */
+    final protected function getValidator(array $input)
+    {
+        return $this->validatorFactory->build(array(
+            'input' => array(
+                'source' => $input,
+                'definition' => array(
+                    'name' => new Pattern\Name(),
+                    'content' => new Pattern\Content()
+                )
+            )
+        ));
+    }
 
-	/**
-	 * Returns template path
-	 * 
-	 * @return string
-	 */
-	final protected function getTemplatePath()
-	{
-		return 'block.form';
-	}
+    /**
+     * Returns template path
+     * 
+     * @return string
+     */
+    final protected function getTemplatePath()
+    {
+        return 'block.form';
+    }
 
-	/**
-	 * Loads shared plugins
-	 * 
-	 * @return void
-	 */
-	final protected function loadSharedPlugins()
-	{
-		$this->view->getPluginBag()
-				   ->appendScript($this->getWithAssetPath('/admin/block.form.js'));
-	}
+    /**
+     * Loads shared plugins
+     * 
+     * @return void
+     */
+    final protected function loadSharedPlugins()
+    {
+        $this->view->getPluginBag()
+                   ->appendScript($this->getWithAssetPath('/admin/block.form.js'));
+    }
 
-	/**
-	 * Returns shared variables for Edit and Add controllers
-	 * 
-	 * @param array $overrides
-	 * @return array
-	 */
-	final protected function getWithSharedVars(array $overrides)
-	{
-		$this->view->getBreadcrumbBag()->add(array(
-			array(
-				'link' => 'Block:Admin:Browser@indexAction',
-				'name' => 'HTML Blocks'
-			),
-			array(
-				'link' => '#',
-				'name' => $overrides['title']
-			)
-		));
+    /**
+     * Returns shared variables for Edit and Add controllers
+     * 
+     * @param array $overrides
+     * @return array
+     */
+    final protected function getWithSharedVars(array $overrides)
+    {
+        $this->view->getBreadcrumbBag()->add(array(
+            array(
+                'link' => 'Block:Admin:Browser@indexAction',
+                'name' => 'HTML Blocks'
+            ),
+            array(
+                'link' => '#',
+                'name' => $overrides['title']
+            )
+        ));
 
-		$vars = array(
-		);
+        $vars = array(
+        );
 
-		return array_replace_recursive($vars, $overrides);
-	}
+        return array_replace_recursive($vars, $overrides);
+    }
 }
