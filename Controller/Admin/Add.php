@@ -23,11 +23,12 @@ final class Add extends AbstractBlock
     public function indexAction()
     {
         $this->loadSharedPlugins();
+        $this->loadBreadcrumbs('Add a block');
 
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+        return $this->view->render($this->getTemplatePath(), array(
             'block' => new VirtualEntity(),
             'title' => 'Add a block'
-        )));
+        ));
     }
 
     /**
@@ -40,11 +41,9 @@ final class Add extends AbstractBlock
         $formValidator = $this->getValidator($this->request->getPost('block'));
 
         if ($formValidator->isValid()) {
-
             $blockManager = $this->getBlockManager();
 
             if ($blockManager->add($this->request->getPost('block'))) {
-
                 $this->flashBag->set('success', 'A block has been created successfully');
                 return $blockManager->getLastId();
             }

@@ -43,14 +43,9 @@ final class Browser extends AbstractAdminController
     private function loadPlugins()
     {
         $this->view->getPluginBag()
-                   ->appendScript($this->getWithAssetPath('/admin/browser.js'));
+                   ->appendScript('@Block/admin/browser.js');
         
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'link' => '#',
-                'name' => 'HTML Blocks'
-            )
-        ));
+        $this->view->getBreadcrumbBag()->addOne('HTML Blocks');
     }
 
     /**
@@ -84,7 +79,6 @@ final class Browser extends AbstractAdminController
             $id = $this->request->getPost('id');
 
             if ($this->getBlockManager()->deleteById($id)) {
-
                 $this->flashBag->set('success', 'A block has been removed successfully');
                 return '1';
             }

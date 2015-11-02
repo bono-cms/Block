@@ -52,31 +52,18 @@ abstract class AbstractBlock extends AbstractAdminController
     final protected function loadSharedPlugins()
     {
         $this->view->getPluginBag()
-                   ->appendScript($this->getWithAssetPath('/admin/block.form.js'));
+                   ->appendScript('@Block/admin/block.form.js');
     }
 
     /**
-     * Returns shared variables for Edit and Add controllers
+     * Loads breadcrumbs
      * 
-     * @param array $overrides
-     * @return array
+     * @param string $title
+     * @return void
      */
-    final protected function getWithSharedVars(array $overrides)
+    final protected function loadBreadcrumbs($title)
     {
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'link' => 'Block:Admin:Browser@indexAction',
-                'name' => 'HTML Blocks'
-            ),
-            array(
-                'link' => '#',
-                'name' => $overrides['title']
-            )
-        ));
-
-        $vars = array(
-        );
-
-        return array_replace_recursive($vars, $overrides);
+        $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Browser@indexAction')
+                                       ->addOne($title);
     }
 }

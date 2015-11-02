@@ -25,6 +25,7 @@ final class Edit extends AbstractBlock
 
         if ($block !== false) {
             $this->loadSharedPlugins();
+            $this->loadBreadcrumbs('Edit the block');
 
             return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
                 'title' => 'Edit the block',
@@ -32,7 +33,6 @@ final class Edit extends AbstractBlock
             )));
 
         } else {
-
             return false;
         }
     }
@@ -47,15 +47,12 @@ final class Edit extends AbstractBlock
         $formValidator = $this->getValidator($this->request->getPost('block'));
 
         if ($formValidator->isValid()) {
-
             if ($this->getBlockManager()->update($this->request->getPost('block'))) {
-
                 $this->flashBag->set('success', 'A block has been updated successfully');
                 return '1';
             }
 
         } else {
-
             return $formValidator->getErrors();
         }
     }
