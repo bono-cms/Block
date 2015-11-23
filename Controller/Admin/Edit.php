@@ -27,10 +27,10 @@ final class Edit extends AbstractBlock
             $this->loadSharedPlugins();
             $this->loadBreadcrumbs('Edit the block');
 
-            return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+            return $this->view->render($this->getTemplatePath(), array(
                 'title' => 'Edit the block',
                 'block' => $block
-            )));
+            ));
 
         } else {
             return false;
