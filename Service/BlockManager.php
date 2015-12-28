@@ -13,8 +13,8 @@ namespace Block\Service;
 
 use Cms\Service\AbstractManager;
 use Cms\Service\HistoryManagerInterface;
-use Krystal\Stdlib\VirtualEntity;
 use Block\Storage\BlockMapperInterface;
+use Krystal\Stdlib\VirtualEntity;
 use Krystal\Security\Filter;
 
 final class BlockManager extends AbstractManager implements BlockManagerInterface
