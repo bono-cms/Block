@@ -12,38 +12,28 @@
 return array(
     
     '/admin/module/block' => array(
-        'controller' => 'Admin:Browser@indexAction'
+        'controller' => 'Admin:Block@gridAction'
     ),
     
     '/admin/module/block/page/(:var)' => array(
-        'controller' => 'Admin:Browser@indexAction'
+        'controller' => 'Admin:Block@gridAction'
     ),
     
-    '/admin/module/block/delete.ajax' => array(
-        'controller' => 'Admin:Browser@deleteAction',
-        'disallow' => array('guest')
-    ),
-    
-    '/admin/module/block/delete-selected.ajax' => array(
-        'controller' => 'Admin:Browser@deleteSelectedAction',
+    '/admin/module/block/delete' => array(
+        'controller' => 'Admin:Block@deleteAction',
         'disallow' => array('guest')
     ),
     
     '/admin/module/block/add' => array(
-        'controller' => 'Admin:Add@indexAction'
-    ),
-    
-    '/admin/module/block/add.ajax' => array(
-        'controller' => 'Admin:Add@addAction',
-        'disallow' => array('guest')
+        'controller' => 'Admin:Block@addAction'
     ),
     
     '/admin/module/block/edit/(:var)' => array(
-        'controller' => 'Admin:Edit@indexAction'
+        'controller' => 'Admin:Block@editAction'
     ),
     
-    '/admin/module/block/edit.ajax' => array(
-        'controller' => 'Admin:Edit@updateAction',
+    '/admin/module/block/save' => array(
+        'controller' => 'Admin:Block@saveAction',
         'disallow' => array('guest')
     )
 );
