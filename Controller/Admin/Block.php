@@ -112,7 +112,7 @@ final class Block extends AbstractController
     {
         $input = $this->request->getPost('block');
 
-        return $this->invokeSave('blockManager', $input, array(
+        return $this->invokeSave('blockManager', $input['id'], $input, array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
