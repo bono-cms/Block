@@ -100,29 +100,7 @@ final class Block extends AbstractController
      */
     public function deleteAction()
     {
-        $blockManager = $this->getModuleService('blockManager');
-
-        // Batch removal
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
-
-            $blockManager->deleteByIds($ids);
-            $this->flashBag->set('success', 'Selected blocks have been removed successfully');
-
-        } else {
-            $this->flashBag->set('warning', 'You should select at least one block to remove');
-        }
-
-        // Single removal
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            if ($blockManager->deleteById($id)) {
-                $this->flashBag->set('success', 'A block has been removed successfully');
-            }
-        }
-
-        return '1';
+        return $this->invokeRemoval('blockManager');
     }
 
     /**
@@ -134,7 +112,7 @@ final class Block extends AbstractController
     {
         $input = $this->request->getPost('block');
 
-        $formValidator = $this->validatorFactory->build(array(
+        return $this->invokeSave('blockManager', $input, array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
@@ -143,25 +121,5 @@ final class Block extends AbstractController
                 )
             )
         ));
-
-        if ($formValidator->isValid()) {
-            $blockManager = $this->getModuleService('blockManager');
-
-            if ($input['id']) {
-                if ($blockManager->update($this->request->getPost('block'))) {
-                    $this->flashBag->set('success', 'A block has been updated successfully');
-                    return '1';
-                }
-
-            } else {
-                if ($blockManager->add($input)) {
-                    $this->flashBag->set('success', 'A block has been created successfully');
-                    return $blockManager->getLastId();
-                }
-            }
-
-        } else {
-            return $formValidator->getErrors();
-        }
     }
 }
