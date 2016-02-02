@@ -10,7 +10,6 @@
  */
 
 return array(
-    
     '/admin/module/block' => array(
         'controller' => 'Admin:Block@gridAction'
     ),
