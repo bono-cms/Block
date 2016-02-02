@@ -12,7 +12,7 @@
 return array(
     'module' => array(
         'url'   => '/admin/module/block',
-        'icon'  => '/module/Block/Assets/block.png',
+        'icon'  => 'fa fa-cubes fa-5x', //fa fa-code
         'name'  => 'HTML Blocks',
         'order' => 1,
         'description' => 'HTML Blocks module allows you to dynamically handle HTML blocks'
