@@ -21,7 +21,7 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     public static function getTableName()
     {
-        return 'bono_module_block';
+        return self::getWithPrefix('bono_module_block');
     }
 
     /**

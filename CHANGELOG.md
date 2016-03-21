@@ -4,6 +4,7 @@ CHANGELOG
 1.3
 ---
 
+ * Added support for table prefix
  * Improved internal structure
  * Updated module icon
 
