@@ -28,4 +28,13 @@ interface SiteServiceInterface
      * @return string
      */
     public function render($class);
+
+    /**
+     * Renders a text exploding it into array
+     * 
+     * @param string $class
+     * @param boolean $trim Whether to trim extra spaces
+     * @return array
+     */
+    public function renderAsArray($class, $trim = true);
 }

@@ -54,4 +54,26 @@ final class SiteService implements SiteServiceInterface
     {
         return $this->blockMapper->fetchContentByClass($class);
     }
+
+    /**
+     * Renders a text exploding it into array
+     * 
+     * @param string $class
+     * @param boolean $trim Whether to trim extra spaces
+     * @return array
+     */
+    public function renderAsArray($class, $trim = true)
+    {
+        $collection = explode("\r", $this->render($class));
+
+        foreach ($collection as &$item) {
+
+            if ($trim === true) {
+                $item = rtrim($item);
+                $item = ltrim($item);
+            }
+        }
+
+        return $collection;
+    }
 }
