@@ -55,7 +55,7 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
      */
     private function track($message, $placeholder)
     {
-        return $this->historyManager->write('Block', $message, $placeholder);
+        return $this->historyManager->write('HTML Blocks', $message, $placeholder);
     }
 
     /**
