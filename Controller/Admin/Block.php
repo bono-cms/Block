@@ -36,7 +36,7 @@ final class Block extends AbstractController
         $blockManager = $this->getModuleService('blockManager');
 
         $paginator = $blockManager->getPaginator();
-        $paginator->setUrl('/admin/module/block/page/(:var)');
+        $paginator->setUrl($this->createUrl('Block:Admin:Block@gridAction', array(), 1));
 
         return $this->view->render('browser', array(
             'blocks'    => $blockManager->fetchAllByPage($page, $this->getSharedPerPageCount()),
