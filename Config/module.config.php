@@ -11,7 +11,7 @@
 
 return array(
     'module' => array(
-        'url'   => '/admin/module/block',
+        'route' => 'Block:Admin:Block@gridAction',
         'icon'  => 'fa fa-cubes fa-5x', //fa fa-code
         'name'  => 'HTML Blocks',
         'order' => 1,
