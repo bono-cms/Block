@@ -25,10 +25,6 @@ final class Block extends AbstractController
      */
     public function gridAction($page = 1)
     {
-        // Load view plugins
-        $this->view->getPluginBag()
-                   ->appendScript('@Block/admin/browser.js');
-
         // Add a breadcrumb
         $this->view->getBreadcrumbBag()
                    ->addOne('HTML Blocks');
@@ -96,11 +92,12 @@ final class Block extends AbstractController
     /**
      * Deletes a block by its associated id
      * 
+     * @param string $id
      * @return string
      */
-    public function deleteAction()
+    public function deleteAction($id)
     {
-        return $this->invokeRemoval('blockManager');
+        return $this->invokeRemoval('blockManager', $id);
     }
 
     /**

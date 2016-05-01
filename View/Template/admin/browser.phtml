@@ -11,7 +11,7 @@
 		 <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
 		 
 		 <?php if (!empty($blocks)): ?>
-		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Block:Admin:Block@deleteAction'); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Block:Admin:Block@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
 		 <?php else: ?>
 		 
 		 <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
@@ -69,7 +69,7 @@
 						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this block'); ?>" data-button="edit" href="<?php echo $this->url('Block:Admin:Block@editAction', $block->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
 
 						<?php if ($extendedMode): ?>
-						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this block'); ?>" data-button="delete" data-id="<?php echo $block->getId(); ?>" data-category="main" href="#" ><i class="glyphicon glyphicon-remove"></i></a>
+						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this block'); ?>" data-button="delete" data-url="<?php echo $this->url('Block:Admin:Block@deleteAction', $block->getId()); ?>" href="#" ><i class="glyphicon glyphicon-remove"></i></a>
 						<?php endif; ?>
 					</td>
 				</tr>

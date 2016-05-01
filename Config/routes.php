@@ -18,7 +18,7 @@ return array(
         'controller' => 'Admin:Block@gridAction'
     ),
     
-    '/admin/module/block/delete' => array(
+    '/admin/module/block/delete/(:var)' => array(
         'controller' => 'Admin:Block@deleteAction',
         'disallow' => array('guest')
     ),
