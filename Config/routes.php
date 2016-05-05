@@ -10,28 +10,28 @@
  */
 
 return array(
-    '/admin/module/block' => array(
+    '/%s/module/block' => array(
         'controller' => 'Admin:Block@gridAction'
     ),
     
-    '/admin/module/block/page/(:var)' => array(
+    '/%s/module/block/page/(:var)' => array(
         'controller' => 'Admin:Block@gridAction'
     ),
     
-    '/admin/module/block/delete/(:var)' => array(
+    '/%s/module/block/delete/(:var)' => array(
         'controller' => 'Admin:Block@deleteAction',
         'disallow' => array('guest')
     ),
     
-    '/admin/module/block/add' => array(
+    '/%s/module/block/add' => array(
         'controller' => 'Admin:Block@addAction'
     ),
     
-    '/admin/module/block/edit/(:var)' => array(
+    '/%s/module/block/edit/(:var)' => array(
         'controller' => 'Admin:Block@editAction'
     ),
     
-    '/admin/module/block/save' => array(
+    '/%s/module/block/save' => array(
         'controller' => 'Admin:Block@saveAction',
         'disallow' => array('guest')
     )
