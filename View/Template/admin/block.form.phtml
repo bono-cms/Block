@@ -6,11 +6,10 @@ use Krystal\Form\Element;
 ?>
 
 <form data-group="block">
-
-	<div class="well clearfix">
+	<div class="well">
         <?php echo Element::hidden('block[id]', $block->getId()); ?>
 
-		<div class="form-group clearfix">
+		<div class="form-group">
 			<label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
 			<div class="col-lg-10">
 				<div class="input-group">
@@ -20,7 +19,7 @@ use Krystal\Form\Element;
 			</div>
 		</div>
 
-		<div class="form-group clearfix">
+		<div class="form-group">
 			<label class="col-lg-2 control-label"><?php $this->show('Content'); ?></label>
 			<div class="col-lg-10">
 				<div class="input-group">
@@ -31,7 +30,7 @@ use Krystal\Form\Element;
 		</div>
 		
 		<?php if ($extendedMode): ?>
-		<div class="form-group clearfix">
+		<div class="form-group">
 			<label class="col-lg-2 control-label"><?php $this->show('Class'); ?></label>
 			<div class="col-lg-10">
 				<div class="input-group">
