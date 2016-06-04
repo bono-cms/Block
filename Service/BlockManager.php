@@ -64,10 +64,10 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     protected function toEntity(array $block)
     {
         $entity = new VirtualEntity();
-        $entity->setId((int) $block['id'])
-            ->setName(Filter::escape($block['name']))
-            ->setClass(Filter::escape($block['class']))
-            ->setContent(Filter::escapeContent($block['content']));
+        $entity->setId($block['id'], VirtualEntity::FILTER_INT)
+            ->setName($block['name'], VirtualEntity::FILTER_TAGS)
+            ->setClass($block['class'], VirtualEntity::FILTER_TAGS)
+            ->setContent($block['content'], VirtualEntity::FILTER_SAFE_TAGS);
 
         return $entity;
     }
