@@ -24,7 +24,7 @@
 <?php endif; ?>
 
 
-<?php $this->loadBlock('items-per-page', array('caption' => 'HTML Blocks')); ?>
+<?php $this->loadPartial('items-per-page', array('caption' => 'HTML Blocks')); ?>
 
 <form>
 	<div class="table-responsive">
@@ -90,4 +90,4 @@
 	</div>
 </form>
 
-<?php $this->loadBlock('paginator'); ?>
+<?php $this->loadPartial('paginator'); ?>
