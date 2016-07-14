@@ -12,7 +12,7 @@
 return array(
     'module' => array(
         'route' => 'Block:Admin:Block@gridAction',
-        'icon'  => 'fa fa-cubes fa-5x', //fa fa-code
+        'icon'  => 'fa fa-cubes fa-5x',
         'name'  => 'HTML Blocks',
         'order' => 1,
         'description' => 'HTML Blocks module allows you to dynamically handle HTML blocks'
