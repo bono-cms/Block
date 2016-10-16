@@ -65,8 +65,8 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     {
         $entity = new VirtualEntity();
         $entity->setId($block['id'], VirtualEntity::FILTER_INT)
-            ->setName($block['name'], VirtualEntity::FILTER_TAGS)
-            ->setClass($block['class'], VirtualEntity::FILTER_TAGS)
+            ->setName($block['name'], VirtualEntity::FILTER_HTML)
+            ->setClass($block['class'], VirtualEntity::FILTER_HTML)
             ->setContent($block['content'], VirtualEntity::FILTER_SAFE_TAGS);
 
         return $entity;
