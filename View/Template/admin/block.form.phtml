@@ -33,7 +33,6 @@ defined('KRYSTAL') or die;
                         <?php $entity = LanguageManager::findByLangId($language->getId(), $block); ?>
 
                         <?php echo Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
-                        <?php echo Element::hidden(sprintf('translation[%s][web_page_id]', $language->getId()), $entity->getWebPageId()); ?>
                         <?php echo Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
 
                         <h2 class="text-muted"><?php echo $language->getName(); ?></h2>
@@ -65,6 +64,8 @@ defined('KRYSTAL') or die;
         </div>
 
         <div role="tabpanel" class="tab-pane" id="configuration">
+            <?php echo Element::hidden('block[id]', $entity->getId()); ?>
+
             <div class="well">
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Class'); ?></label>

@@ -127,11 +127,11 @@ final class Block extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost();
+        $input = $this->request->getPost('block');
 
         $formValidator = $this->createValidator(array(
             'input' => array(
-                'source' => $input['block'],
+                'source' => $input,
                 'definition' => array(
                     'name' => new Pattern\Name(),
                     'content' => new Pattern\Content()
@@ -143,15 +143,15 @@ final class Block extends AbstractController
             $service = $this->getModuleService('blockManager');
 
             // Update
-            if (!empty($input['post']['id'])) {
-                if ($service->update($input)) {
+            if (!empty($input['id'])) {
+                if ($service->update($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
                     return '1';
                 }
 
             } else {
                 // Create
-                if ($service->add($input)) {
+                if ($service->add($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
                     return $service->getLastId();
                 }
