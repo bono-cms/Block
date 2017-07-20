@@ -65,6 +65,7 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     {
         $entity = new VirtualEntity();
         $entity->setId($block['id'], VirtualEntity::FILTER_INT)
+            ->setLangId($block['lang_id'], VirtualEntity::FILTER_INT)
             ->setName($block['name'], VirtualEntity::FILTER_HTML)
             ->setClass($block['class'], VirtualEntity::FILTER_HTML)
             ->setContent($block['content'], VirtualEntity::FILTER_SAFE_TAGS);
@@ -133,8 +134,8 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
      */
     public function add(array $input)
     {
-        $this->track('Added new block "%s"', $input['name']);
-        return $this->blockMapper->insert($input);
+        #$this->track('Added new block "%s"', $input['name']);
+        return $this->blockMapper->saveEntity($input['block'], $input['translation']);
     }
 
     /**
@@ -145,19 +146,24 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
      */
     public function update(array $input)
     {
-        $this->track('Updated block "%s"', $input['name']);
-        return $this->blockMapper->update($input);
+        #$this->track('Updated block "%s"', $input['name']);
+        return $this->blockMapper->saveEntity($input['block'], $input['translation']);
     }
 
     /**
      * Fetches block's entity by its associated id
      * 
      * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->prepareResult($this->blockMapper->fetchById($id));
+        if ($withTranslations == true) {
+            return $this->prepareResults($this->blockMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->blockMapper->fetchById($id, false));
+        }
     }
 
     /**

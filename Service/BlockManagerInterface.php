@@ -60,12 +60,13 @@ interface BlockManagerInterface
     public function update(array $form);
 
     /**
-     * Fetches a block bag by its associated id
+     * Fetches block's entity by its associated id
      * 
      * @param string $id
-     * @return array
+     * @param boolean $withTranslations Whether to fetch translations or not
+     * @return \Krystal\Stdlib\VirtualEntity|boolean
      */
-    public function fetchById($id);
+    public function fetchById($id, $withTranslations);
 
     /**
      * Deletes a block by its associated id

@@ -65,31 +65,8 @@ interface BlockMapperInterface
      * Fetches block data by its associated id
      * 
      * @param string $id Block id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id);
-
-    /**
-     * Inserts block's data
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function insert(array $input);
-
-    /**
-     * Updates block's data
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function update(array $input);
-
-    /**
-     * Deletes a block by its associated id
-     * 
-     * @param string $id Block id
-     * @return boolean Depending on success
-     */
-    public function deleteById($id);
+    public function fetchById($id, $withTranslations);
 }

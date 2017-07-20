@@ -25,6 +25,30 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getTranslationTable()
+    {
+        return self::getWithPrefix('bono_module_block_translations');
+    }
+
+    /**
+     * Returns shared columns to be selected
+     * 
+     * @return array
+     */
+    private function getColumns()
+    {
+        return array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('class'),
+            self::getFullColumnName('lang_id', self::getTranslationTable()),
+            self::getFullColumnName('name', self::getTranslationTable()),
+            self::getFullColumnName('content', self::getTranslationTable())
+        );
+    }
+
+    /**
      * Fetches block's name by its associated class name
      * 
      * @param string $name
@@ -95,10 +119,8 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     public function fetchAll()
     {
-        return $this->db->select('*')
-                        ->from(static::getTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->queryAll();
+        return $this->createEntitySelect($this->getColumns())
+                    ->queryAll();
     }
 
     /**
@@ -110,56 +132,26 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     public function fetchAllByPage($page, $itemsPerPage)
     {
-        return $this->db->select('*')
-                        ->from(static::getTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->orderBy('id')
-                        ->desc()
-                        ->paginate($page, $itemsPerPage)
-                        ->queryAll();
+        return $this->createEntitySelect($this->getColumns())
+                    ->whereEquals(
+                        self::getFullColumnName('lang_id', self::getTranslationTable()), 
+                        $this->getLangId()
+                    )
+                    ->orderBy(self::getFullColumnName('id'))
+                    ->desc()
+                    ->paginate($page, $itemsPerPage)
+                    ->queryAll();
     }
 
     /**
      * Fetches block data by its associated id
      * 
      * @param string $id Block id
+     * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->findByPk($id);
-    }
-
-    /**
-     * Inserts block's data
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function insert(array $input)
-    {
-        return $this->persist($this->getWithLang($input));
-    }
-
-    /**
-     * Updates block's data
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function update(array $input)
-    {
-        return $this->persist($input);
-    }
-
-    /**
-     * Deletes a block by its associated id
-     * 
-     * @param string $id
-     * @return boolean
-     */
-    public function deleteById($id)
-    {
-        return $this->deleteByPk($id);
+        return $this->findEntity($this->getColumns(), $id, $withTranslations);
     }
 }
