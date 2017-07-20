@@ -175,12 +175,11 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     public function deleteById($id)
     {
         // Grab block's name before we fetch it
-        $name = Filter::escape($this->blockMapper->fetchNameById($id));
+        //$name = Filter::escape($this->blockMapper->fetchNameById($id));
 
-        if ($this->blockMapper->deleteById($id)) {
-            $this->track('Removed "%s" block', $name);
+        if ($this->blockMapper->deleteEntity($id)) {
+            //$this->track('Removed "%s" block', $name);
             return true;
-
         } else {
             return false;
         }
@@ -194,13 +193,8 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
      */
     public function deleteByIds(array $ids)
     {
-        foreach ($ids as $id) {
-            if (!$this->blockMapper->deleteById($id)) {
-                return false;
-            }
-        }
-
-        $this->track('Batch removal of %s blocks', count($ids));
+        $this->blockMapper->deleteEntity($ids);
+        // $this->track('Batch removal of %s blocks', count($ids));
         return true;
     }
 }
