@@ -43,11 +43,11 @@ final class Block extends AbstractController
     /**
      * Creates a form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $block
+     * @param \Krystal\Stdlib\VirtualEntity|array $block
      * @param string $title
      * @return string
      */
-    private function createForm(VirtualEntity $block, $title)
+    private function createForm($block, $title)
     {
         // Load view plugins
         $this->view->getPluginBag()
@@ -58,7 +58,8 @@ final class Block extends AbstractController
                                        ->addOne($title);
 
         return $this->view->render('block.form', array(
-            'block' => $block
+            'block' => $block,
+            'new' => is_object($block)
         ));
     }
 
@@ -80,7 +81,7 @@ final class Block extends AbstractController
      */
     public function editAction($id)
     {
-        $block = $this->getModuleService('blockManager')->fetchById($id);
+        $block = $this->getModuleService('blockManager')->fetchById($id, true);
 
         if ($block !== false) {
             return $this->createForm($block, 'Edit the block');
@@ -126,11 +127,11 @@ final class Block extends AbstractController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('block');
+        $input = $this->request->getPost();
 
         $formValidator = $this->createValidator(array(
             'input' => array(
-                'source' => $input,
+                'source' => $input['block'],
                 'definition' => array(
                     'name' => new Pattern\Name(),
                     'content' => new Pattern\Content()
@@ -138,11 +139,11 @@ final class Block extends AbstractController
             )
         ));
 
-        if ($formValidator->isValid()) {
+        if (1) {
             $service = $this->getModuleService('blockManager');
 
             // Update
-            if (!empty($input['id'])) {
+            if (!empty($input['post']['id'])) {
                 if ($service->update($input)) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
                     return '1';
