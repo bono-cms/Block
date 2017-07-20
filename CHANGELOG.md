@@ -4,6 +4,7 @@ CHANGELOG
 1.3
 ---
 
+ * Support complete internalization
  * Fixed issue with quote escaping
  * Added `renderAsArray()` in site service object
  * Added support for table prefix
