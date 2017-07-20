@@ -79,11 +79,10 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     private function fetchColumnByClass($column, $class)
     {
-        return $this->db->select($column)
-                        ->from(static::getTableName())
-                        ->whereEquals('class', $class)
-                        ->andWhereEquals('lang_id', $this->getLangId())
-                        ->query($column);
+        return $this->createEntitySelect(array($column))
+                    ->whereEquals('class', $class)
+                    ->andWhereEquals('lang_id', $this->getLangId())
+                    ->queryScalar();
     }
 
     /**
@@ -105,11 +104,10 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     public function fetchByClass($class)
     {
-        return $this->db->select('*')
-                        ->from(static::getTableName())
-                        ->whereEquals('class', $class)
-                        ->andWhereEquals('lang_id', $this->getLangId())
-                        ->query();
+        return $this->createEntitySelect($this->getColumns())
+                    ->whereEquals('class', $class)
+                    ->andWhereEquals('lang_id', $this->getLangId())
+                    ->query();
     }
 
     /**
