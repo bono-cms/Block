@@ -29,7 +29,7 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     public static function getTranslationTable()
     {
-        return self::getWithPrefix('bono_module_block_translations');
+        return BlockTranslationMapper::getTableName();
     }
 
     /**
@@ -42,9 +42,9 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
         return array(
             self::getFullColumnName('id'),
             self::getFullColumnName('class'),
-            self::getFullColumnName('lang_id', self::getTranslationTable()),
-            self::getFullColumnName('name', self::getTranslationTable()),
-            self::getFullColumnName('content', self::getTranslationTable())
+            BlockTranslationMapper::getFullColumnName('lang_id'),
+            BlockTranslationMapper::getFullColumnName('name'),
+            BlockTranslationMapper::getFullColumnName('content')
         );
     }
 
@@ -132,7 +132,7 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     {
         return $this->createEntitySelect($this->getColumns())
                     ->whereEquals(
-                        self::getFullColumnName('lang_id', self::getTranslationTable()), 
+                        BlockTranslationMapper::getFullColumnName('lang_id'), 
                         $this->getLangId()
                     )
                     ->orderBy(self::getFullColumnName('id'))

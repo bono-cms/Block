@@ -11,18 +11,15 @@
 
 namespace Block\Storage\MySQL;
 
-use Cms\Storage\MySQL\AbstractStorageDropper;
+use Cms\Storage\MySQL\AbstractMapper;
 
-final class Dropper extends AbstractStorageDropper
+final class BlockTranslationMapper extends AbstractMapper
 {
     /**
      * {@inheritDoc}
      */
-    protected function getTables()
+    public static function getTableName()
     {
-        return array(
-            BlockMapper::getTableName(),
-            BlockTranslationMapper::getTableName()
-        );
+        return self::getWithPrefix('bono_module_block_translations');
     }
 }
