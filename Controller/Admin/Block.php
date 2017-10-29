@@ -58,8 +58,7 @@ final class Block extends AbstractController
                                        ->addOne($title);
 
         return $this->view->render('block.form', array(
-            'block' => $block,
-            'new' => is_object($block)
+            'block' => $block
         ));
     }
 
