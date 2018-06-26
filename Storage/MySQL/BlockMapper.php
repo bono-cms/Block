@@ -40,11 +40,11 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     private function getColumns()
     {
         return array(
-            self::getFullColumnName('id'),
-            self::getFullColumnName('class'),
-            BlockTranslationMapper::getFullColumnName('lang_id'),
-            BlockTranslationMapper::getFullColumnName('name'),
-            BlockTranslationMapper::getFullColumnName('content')
+            self::column('id'),
+            self::column('class'),
+            BlockTranslationMapper::column('lang_id'),
+            BlockTranslationMapper::column('name'),
+            BlockTranslationMapper::column('content')
         );
     }
 
@@ -132,10 +132,10 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     {
         return $this->createEntitySelect($this->getColumns())
                     ->whereEquals(
-                        BlockTranslationMapper::getFullColumnName('lang_id'), 
+                        BlockTranslationMapper::column('lang_id'), 
                         $this->getLangId()
                     )
-                    ->orderBy(self::getFullColumnName('id'))
+                    ->orderBy(self::column('id'))
                     ->desc()
                     ->paginate($page, $itemsPerPage)
                     ->queryAll();
