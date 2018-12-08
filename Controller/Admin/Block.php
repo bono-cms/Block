@@ -36,6 +36,7 @@ final class Block extends AbstractController
 
         return $this->view->render('browser', array(
             'blocks'    => $blockManager->fetchAllByPage($page, $this->getSharedPerPageCount()),
+            'categories' => $this->getModuleService('categoryService')->fetchAll(),
             'paginator' => $paginator
         ));
     }
