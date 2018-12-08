@@ -20,3 +20,14 @@ CREATE TABLE `bono_module_block_categories` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Category ID',
     `name` varchar(255) NOT NULL COMMENT 'Category name'
 ) DEFAULT CHARSET = UTF8;
+
+/* Category fields */
+DROP TABLE IF EXISTS `bono_module_block_category_fields`;
+CREATE TABLE `bono_module_block_category_fields` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Field ID',
+    `category_id` INT NOT NULL COMMENT 'Category ID',
+    `name` varchar(255) NOT NULL COMMENT 'Field name',
+    `type` SMALLINT NOT NULL COMMENT 'Field type constant',
+
+    FOREIGN KEY (category_id) REFERENCES bono_module_block_categories(id) ON DELETE CASCADE
+) DEFAULT CHARSET = UTF8;
