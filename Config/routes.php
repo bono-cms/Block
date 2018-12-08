@@ -34,5 +34,24 @@ return array(
     '/%s/module/block/save' => array(
         'controller' => 'Admin:Block@saveAction',
         'disallow' => array('guest')
+    ),
+    
+    // Categories
+    '/%s/module/block/category/delete/(:var)' => array(
+        'controller' => 'Admin:Category@deleteAction',
+        'disallow' => array('guest')
+    ),
+    
+    '/%s/module/block/category/add' => array(
+        'controller' => 'Admin:Category@addAction'
+    ),
+    
+    '/%s/module/block/category/edit/(:var)' => array(
+        'controller' => 'Admin:Category@editAction'
+    ),
+    
+    '/%s/module/block/category/save' => array(
+        'controller' => 'Admin:Category@saveAction',
+        'disallow' => array('guest')
     )
 );
