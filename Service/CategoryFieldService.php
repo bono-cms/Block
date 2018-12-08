@@ -48,4 +48,15 @@ final class CategoryFieldService extends AbstractManager
 
         return $entity;
     }
+
+    /**
+     * Fetch all fields by attached category ID
+     * 
+     * @param int $categoryId
+     * @return array
+     */
+    public function fetchAll($categoryId)
+    {
+        return $this->prepareResults($this->categoryFieldMapper->fetchAll($categoryId));
+    }
 }

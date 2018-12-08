@@ -23,4 +23,21 @@ final class CategoryFieldMapper extends AbstractMapper implements CategoryFieldM
     {
         return self::getWithPrefix('bono_module_block_category_fields');
     }
+
+    /**
+     * Fetch all fields by attached category ID
+     * 
+     * @param int $categoryId
+     * @return array
+     */
+    public function fetchAll($categoryId)
+    {
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->whereEquals('category_id', $categoryId)
+                       ->orderBy('id')
+                       ->desc();
+
+        return $db->queryAll();
+    }
 }
