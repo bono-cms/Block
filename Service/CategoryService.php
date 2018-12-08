@@ -48,6 +48,16 @@ final class CategoryService extends AbstractManager
     }
 
     /**
+     * Fetch all categories
+     * 
+     * @return array
+     */
+    public function fetchAll()
+    {
+        return $this->prepareResults($this->categoryMapper->fetchAll());
+    }
+
+    /**
      * Fetch category by its ID
      * 
      * @param int $id Category ID

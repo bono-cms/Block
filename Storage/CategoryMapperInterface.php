@@ -13,5 +13,10 @@ namespace Block\Storage;
 
 interface CategoryMapperInterface
 {
-    
+    /**
+     * Fetch all categories
+     * 
+     * @return array
+     */
+    public function fetchAll();
 }
