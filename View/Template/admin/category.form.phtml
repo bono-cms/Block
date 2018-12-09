@@ -54,6 +54,13 @@ defined('KRYSTAL') or die;
                         // A column to be considered as a primary key
                         'pk' => 'id',
                         'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                        'rowAttributes' => array(
+                            'class' => function($row) use ($field){
+                                if ($row->getId() == $field->getId()){
+                                    return 'success';
+                                }
+                            }
+                        ),
                         'columns' => array(
                             array(
                                 'column' => 'id',
