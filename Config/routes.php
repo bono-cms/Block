@@ -64,6 +64,10 @@ return array(
         'controller' => 'Admin:CategoryField@deleteAction'
     ),
 
+    '/%s/module/block/category/field/add/(:var)' => array(
+        'controller' => 'Admin:CategoryField@addAction'
+    ),
+    
     '/%s/module/block/category/field/edit/(:var)' => array(
         'controller' => 'Admin:CategoryField@editAction'
     )
