@@ -11,28 +11,10 @@
 
 namespace Block\Controller\Admin;
 
-use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
 
-final class Category extends AbstractController
+final class Category extends AbstractCategoryController
 {
-    /**
-     * Creates a form
-     * 
-     * @param \Krystal\Stdlib\VirtualEntity $category
-     * @return string
-     */
-    private function createForm(VirtualEntity $category)
-    {
-        // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@gridAction')
-                                       ->addOne($category->getId() ? 'Edit the category' : 'Add new category');
-
-        return $this->view->render('category.form', array(
-            'category' => $category
-        ));
-    }
-
     /**
      * Renders adding form
      * 
@@ -40,7 +22,7 @@ final class Category extends AbstractController
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity);
+        return $this->createForm(new VirtualEntity, new VirtualEntity);
     }
 
     /**
@@ -54,7 +36,10 @@ final class Category extends AbstractController
         $category = $this->getModuleService('categoryService')->fetchById($id);
 
         if ($category !== false) {
-            return $this->createForm($category);
+            $field = new VirtualEntity();
+            $field->setCategoryId($id);
+
+            return $this->createForm($category, $field);
         } else {
             return false;
         }

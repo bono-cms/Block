@@ -1,33 +1,127 @@
 <?php
 
 use Krystal\Form\Element;
+use Krystal\Grid\Grid;
+
 defined('KRYSTAL') or die;
 
 ?>
 
-<form data-group="category">
-	<div class="well">
-        <?php echo Element::hidden('category[id]', $category->getId()); ?>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
+    <li role="presentation"><a href="#fields" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Fields'); ?></a></li>
+</ul>
 
-		<div class="form-group">
-			<label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-			<div class="col-lg-10">
-				<div class="input-group">
-                    <?php echo Element::text('category[name]', $category->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Category name'))); ?>
-					<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-				</div>
-			</div>
-		</div>
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="category" role="tabpanel">
+        <div class="well">
+            <form data-group="category">
+                <div class="well">
+                    <?php echo Element::hidden('category[id]', $category->getId()); ?>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                        <div class="col-lg-10">
+                            <div class="input-group">
+                                <?php echo Element::text('category[name]', $category->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Category name'))); ?>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if (!$category->getId()): ?>
+                <button data-button="add" data-back-url="<?php echo $this->url('Block:Admin:Category@editAction', null); ?>" data-url="<?php echo $this->url('Block:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+                <button data-button="add-create" data-url="<?php echo $this->url('Block:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+                <?php else: ?>
+
+                <button data-button="save" data-url="<?php echo $this->url('Block:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+                <button data-button="save-create" data-back-url="<?php echo $this->url('Block:Admin:Category@addAction'); ?>" data-url="<?php echo $this->url('Block:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+
+                <?php endif; ?>
+                <button data-button="cancel" data-url="<?php echo $this->url('Block:Admin:Block@gridAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+            </form>                
+        </div>
     </div>
 
-    <?php if (!$category->getId()): ?>
-    <button data-button="add" data-back-url="<?php echo $this->url('Block:Admin:Category@editAction', null); ?>" data-url="<?php echo $this->url('Block:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-    <button data-button="add-create" data-url="<?php echo $this->url('Block:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
-    <?php else: ?>
+    <div class="tab-pane fade in" id="fields" role="tabpanel">
+        <div class="well">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Fields'); ?> <small>(<?= count($fields); ?>)</small></h2>
 
-    <button data-button="save" data-url="<?php echo $this->url('Block:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-    <button data-button="save-create" data-back-url="<?php echo $this->url('Block:Admin:Category@addAction'); ?>" data-url="<?php echo $this->url('Block:Admin:Category@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+                    <?= Grid::render($fields, array(
+                        // A column to be considered as a primary key
+                        'pk' => 'id',
+                        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                        'columns' => array(
+                            array(
+                                'column' => 'id',
+                                'label' => '#'
+                            ),
 
-    <?php endif; ?>
-	<button data-button="cancel" data-url="<?php echo $this->url('Block:Admin:Block@gridAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
-</form>
+                            array(
+                                'column' => 'name',
+                            ),
+
+                            array(
+                                'column' => 'type',
+                            )
+                        ),
+
+                        'actions' => array(
+                            'edit' => function($row){
+                                return Element::icon('glyphicon glyphicon-pencil', $this->url('Block:Admin:CategoryField@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this category'), 'data-button' => 'edit'));
+                            },
+
+                            'remove' => function($row){
+                                return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this category'), 'data-button' => 'delete', 'data-url' => $this->url('Block:Admin:CategoryField@deleteAction', $row['id'])));
+                            }
+                        )
+
+                    ), $this->translator); ?>    
+                </div>
+
+                <div class="col-lg-6">
+                    <form data-group="field">
+                        <div class="well">
+                            <?php echo Element::hidden('field[id]', $field->getId()); ?>
+                            <?php echo Element::hidden('field[category_id]', $category->getId()); ?>
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                                <div class="col-lg-10">
+                                    <div class="input-group">
+                                        <?php echo Element::text('field[name]', $field->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Field name'))); ?>
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label"><?php $this->show('Type'); ?></label>
+                                <div class="col-lg-10">
+                                    <div class="input-group">
+                                        <?php echo Element::text('field[type]', $field->getType(), array('class' => 'form-control')); ?>
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php if (!$field->getId()): ?>
+                        <button data-button="add" data-back-url="<?php echo $this->url('Block:Admin:CategoryField@editAction', null); ?>" data-url="<?php echo $this->url('Block:Admin:CategoryField@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
+                        <button data-button="add-create" data-url="<?php echo $this->url('Block:Admin:CategoryField@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add & Create new'); ?></button>
+                        <?php else: ?>
+
+                        <button data-button="save" data-url="<?php echo $this->url('Block:Admin:CategoryField@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+                        <button data-button="save-create" data-back-url="<?php echo $this->url('Block:Admin:CategoryField@addAction', $category->getId()); ?>" data-url="<?php echo $this->url('Block:Admin:CategoryField@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+
+                        <?php endif; ?>
+                        <button data-button="cancel" data-url="<?php echo $this->url('Block:Admin:Block@gridAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+                    </form>                                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
