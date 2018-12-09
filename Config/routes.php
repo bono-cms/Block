@@ -53,5 +53,18 @@ return array(
     '/%s/module/block/category/save' => array(
         'controller' => 'Admin:Category@saveAction',
         'disallow' => array('guest')
+    ),
+
+    // Category fields
+    '/%s/module/block/category/field/save' => array(
+        'controller' => 'Admin:CategoryField@saveAction'
+    ),
+
+    '/%s/module/block/category/field/delete/(:var)' => array(
+        'controller' => 'Admin:CategoryField@deleteAction'
+    ),
+
+    '/%s/module/block/category/field/edit/(:var)' => array(
+        'controller' => 'Admin:CategoryField@editAction'
     )
 );

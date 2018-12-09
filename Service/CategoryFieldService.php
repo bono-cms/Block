@@ -50,6 +50,49 @@ final class CategoryFieldService extends AbstractManager
     }
 
     /**
+     * Deletes a field by its
+     * 
+     * @param int $id Field ID
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->categoryFieldMapper->deleteByPk($id);
+    }
+
+    /**
+     * Saves a field
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function save(array $input)
+    {
+        return $this->categoryFieldMapper->persist($input);
+    }
+
+    /**
+     * Returns last field ID
+     * 
+     * @return mixed
+     */
+    public function getLastId()
+    {
+        return $this->categoryFieldMapper->getMaxId();
+    }
+
+    /**
+     * Fetch field by its ID
+     * 
+     * @param int $id Field ID
+     * @return mixed
+     */
+    public function fetchById($id)
+    {
+        return $this->prepareResult($this->categoryFieldMapper->findByPk($id));
+    }
+
+    /**
      * Fetch all fields by attached category ID
      * 
      * @param int $categoryId
