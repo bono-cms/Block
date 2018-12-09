@@ -102,7 +102,7 @@ defined('KRYSTAL') or die;
                                 <label class="col-lg-2 control-label"><?php $this->show('Type'); ?></label>
                                 <div class="col-lg-10">
                                     <div class="input-group">
-                                        <?php echo Element::text('field[type]', $field->getType(), array('class' => 'form-control')); ?>
+                                        <?php echo Element::select('field[type]', $this->translateArray($fieldTypes), $field->getType(), array('class' => 'form-control')); ?>
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                                     </div>
                                 </div>

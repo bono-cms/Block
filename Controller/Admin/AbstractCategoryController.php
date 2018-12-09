@@ -13,6 +13,7 @@ namespace Block\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
+use Block\Collection\FieldTypeCollection;
 
 abstract class AbstractCategoryController extends AbstractController
 {
@@ -29,10 +30,13 @@ abstract class AbstractCategoryController extends AbstractController
         $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@gridAction')
                                        ->addOne($category->getId() ? 'Edit the category' : 'Add new category');
 
+        $fTypeCol = new FieldTypeCollection();
+
         return $this->view->render('category.form', array(
             'category' => $category,
             'field' => $field,
-            'fields' => $category->getId() ? $this->getModuleService('categoryFieldService')->fetchAll($category->getId()) : array()
+            'fields' => $category->getId() ? $this->getModuleService('categoryFieldService')->fetchAll($category->getId()) : array(),
+            'fieldTypes' => $fTypeCol->getAll()
         ));
     }
 }
