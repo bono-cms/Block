@@ -13,6 +13,7 @@ namespace Block\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
 use Block\Storage\CategoryMapperInterface;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class CategoryMapper extends AbstractMapper implements CategoryMapperInterface
 {
@@ -25,14 +26,26 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
-     * Fetch all categories
+     * Fetch all categories with field count
      * 
      * @return array
      */
     public function fetchAll()
     {
-        $db = $this->db->select('*')
+        // To be selected
+        $columns = array(
+            self::column('id'),
+            self::column('name')
+        );
+
+        $db = $this->db->select($columns)
+                       ->count(CategoryFieldMapper::column('id'), 'field_count')
                        ->from(self::getTableName())
+                       // Category field relation
+                       ->leftJoin(CategoryFieldMapper::getTableName(), array(
+                            CategoryFieldMapper::column('category_id') => self::getRawColumn('id')
+                       ))
+                       ->groupBy($columns)
                        ->orderBy('id')
                        ->desc();
 
