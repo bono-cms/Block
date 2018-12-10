@@ -99,6 +99,9 @@ defined('KRYSTAL') or die;
                 <div class="col-lg-6">
                     <form data-group="field">
                         <div class="well">
+                            <h2><i class="glyphicon glyphicon-pencil"></i> <?php $this->show(!$field->getId() ? 'Add new field' : 'Edit the field'); ?></h2>
+                            <br />
+
                             <?php echo Element::hidden('field[id]', $field->getId()); ?>
                             <?php echo Element::hidden('field[category_id]', $category->getId()); ?>
 
