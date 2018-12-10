@@ -44,6 +44,10 @@ final class CategoryService extends AbstractManager
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
                ->setName($row['name'], VirtualEntity::FILTER_TAGS);
 
+        if (isset($row['field_count'])) {
+            $entity->setFieldCount($row['field_count'], VirtualEntity::FILTER_INT);
+        }
+
         return $entity;
     }
 
