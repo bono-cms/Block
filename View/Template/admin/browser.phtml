@@ -1,93 +1,97 @@
-<?php defined('KRYSTAL') or die; ?>
+<?php
 
-<?php if ($extendedMode): ?>
-<div class="btn-toolbar">
-	<div class="btn-group">
-	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-		<i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?> <span class="caret"></span>
-	  </button>
-	  <ul class="dropdown-menu">
-		 <li><a href="<?php echo $this->url('Block:Admin:Block@addAction'); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new block'); ?></a></li>
-		 <li class="divider"></li>
-		 <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
-		 
-		 <?php if (!empty($blocks)): ?>
-		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('Block:Admin:Block@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-		 <?php else: ?>
-		 
-		 <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-		 
-		 <?php endif; ?>
-	  </ul>
-	</div>
+use Cms\View\Icon;
+
+defined('KRYSTAL') or die;
+
+?>
+
+<div class="card">
+    <?php if ($extendedMode): ?>
+    <div class="btn-toolbar">
+        <div class="dropdown">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?> <span class="caret"></span>
+          </button>
+
+          <div class="dropdown-menu">
+             <a class="dropdown-item" href="<?php echo $this->url('Block:Admin:Block@addAction'); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new block'); ?></a>
+             <div class="dropdown-divider"></div>
+             <div class="dropdown-header"><?php $this->show('Actions'); ?></div>
+
+             <?php if (!empty($blocks)): ?>
+             <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?php echo $this->url('Block:Admin:Block@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+             <?php else: ?>
+             <a class="dropdown-item"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
+             <?php endif; ?>
+          </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+
+    <?php $this->loadPartial('items-per-page', array('caption' => 'HTML Blocks')); ?>
+
+    <form>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <?php if ($extendedMode): ?>
+                        <th class="text-center">
+                            <?php if (!empty($blocks)): ?>
+                            <input type="checkbox" />
+                            <?php endif; ?>
+                        </th>
+                        <?php endif; ?>
+                        
+                        <th class="text-center"><?php $this->show('#'); ?></th>
+                        <th class="text-center"><?php $this->show('Name'); ?></th>
+                        
+                        <?php if ($extendedMode): ?>
+                        <th class="text-center"><?php $this->show('Class'); ?></th>
+                        <?php endif; ?>
+                        
+                        <th class="text-center"><?php $this->show('Actions'); ?></th>
+                    </tr>
+                </thead>
+
+                <?php if (!empty($blocks)): ?>
+                <tbody>
+                    <?php foreach ($blocks as $block): ?>
+                    <tr>
+                        <?php if ($extendedMode): ?>
+                        <td class="text-center">
+                            <input type="checkbox" name="toDelete[<?php echo $block->getId(); ?>]" />
+                        </td>
+                        <?php endif; ?>
+                        <td class="text-center text-muted"><?php echo $block->getId(); ?></td>
+                        <td class="text-center"><?php echo $block->getName(); ?></td>
+
+                        <?php if ($extendedMode): ?>
+                        <td class="text-center"><?php echo $block->getClass(); ?></td>
+                        <?php endif; ?>
+
+                        <td class="text-center">
+                            <?= Icon::edit($this->url('Block:Admin:Block@editAction', $block->getId()), $this->translate('Edit this block')); ?>
+
+                            <?php if ($extendedMode): ?>
+                            <?= Icon::remove($this->url('Block:Admin:Block@deleteAction', $block->getId()), $this->translate('Remove this block')); ?>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <?php endif; ?>
+            </table>
+
+            <?php if (empty($blocks)): ?>
+            <div class="center-block">
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No blocks'); ?></h2>
+            </div>
+            <?php endif; ?>
+        </div>
+    </form>
+
+    <?php $this->loadPartial('paginator'); ?>
 </div>
-<?php endif; ?>
-
-
-<?php $this->loadPartial('items-per-page', array('caption' => 'HTML Blocks')); ?>
-
-<form>
-	<div class="table-responsive">
-		<table class="table table-hover table-bordered table-striped">
-			<thead>
-				<tr>
-					<?php if ($extendedMode): ?>
-					<th class="text-center">
-						<?php if (!empty($blocks)): ?>
-						<input type="checkbox" />
-						<?php endif; ?>
-					</th>
-					<?php endif; ?>
-					
-					<th class="text-center"><?php $this->show('#'); ?></th>
-					<th class="text-center"><?php $this->show('Name'); ?></th>
-					
-					<?php if ($extendedMode): ?>
-					<th class="text-center"><?php $this->show('Class'); ?></th>
-					<?php endif; ?>
-					
-					<th class="text-center"><?php $this->show('Actions'); ?></th>
-				</tr>
-			</thead>
-			
-			<?php if (!empty($blocks)): ?>
-			<tbody>
-				<?php foreach ($blocks as $block): ?>
-				<tr>
-					<?php if ($extendedMode): ?>
-					<td class="text-center">
-						<input type="checkbox" name="toDelete[<?php echo $block->getId(); ?>]" />
-					</td>
-					<?php endif; ?>
-					<td class="text-center text-muted"><?php echo $block->getId(); ?></td>
-					<td class="text-center"><?php echo $block->getName(); ?></td>
-					
-					<?php if ($extendedMode): ?>
-					<td class="text-center"><?php echo $block->getClass(); ?></td>
-					<?php endif; ?>
-					
-					<td class="text-center">
-						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this block'); ?>" data-button="edit" href="<?php echo $this->url('Block:Admin:Block@editAction', $block->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-
-						<?php if ($extendedMode): ?>
-						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this block'); ?>" data-button="delete" data-url="<?php echo $this->url('Block:Admin:Block@deleteAction', $block->getId()); ?>" href="#" ><i class="glyphicon glyphicon-remove"></i></a>
-						<?php endif; ?>
-					</td>
-				</tr>
-				<?php endforeach; ?>
-				
-			</tbody>
-			<?php endif; ?>
-			
-		</table>
-		
-		<?php if (empty($blocks)): ?>
-		<div class="center-block">
-			<h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No blocks'); ?></h2>
-		</div>
-		<?php endif; ?>
-		
-	</div>
-</form>
-
-<?php $this->loadPartial('paginator'); ?>
