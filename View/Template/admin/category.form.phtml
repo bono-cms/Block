@@ -9,25 +9,23 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
-    <li role="presentation"><a href="#fields" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Fields'); ?></a></li>
-</ul>
+<div class="card">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="nav-item active"><a class="nav-link" href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
+        <li role="presentation" class="nav-item"><a class="nav-link" href="#fields" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Fields'); ?></a></li>
+    </ul>
 
-<div class="tab-content">
-    <div class="tab-pane fade in active" id="category" role="tabpanel">
-        <div class="well">
-            <form data-group="category">
-                <div class="well">
-                    <?php echo Element::hidden('category[id]', $category->getId()); ?>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="category" role="tabpanel">
+            <form data-group="category" autocomplete="off">
+                <?php echo Element::hidden('category[id]', $category->getId()); ?>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text('category[name]', $category->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Category name'))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                    <div class="col-lg-10">
+                        <div class="input-group">
+                            <?php echo Element::text('category[name]', $category->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Category name'))); ?>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                         </div>
                     </div>
                 </div>
@@ -44,10 +42,8 @@ defined('KRYSTAL') or die;
                 <button data-button="cancel" data-url="<?php echo $this->url('Block:Admin:Block@gridAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
             </form>                
         </div>
-    </div>
 
-    <div class="tab-pane fade in" id="fields" role="tabpanel">
-        <div class="well">
+        <div class="tab-pane fade in" id="fields" role="tabpanel">
             <div class="row">
                 <div class="col-lg-6">
                     <h2><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Fields'); ?> <small>(<?= count($fields); ?>)</small></h2>
@@ -57,8 +53,8 @@ defined('KRYSTAL') or die;
                         'tableClass' => 'table table-hover table-bordered table-striped',
                         'rowAttributes' => array(
                             'class' => function($row) use ($field){
-                                if ($row->getId() == $field->getId()){
-                                    return 'success';
+                                if ($row->getId() == $field->getId()) {
+                                    return 'table-info';
                                 }
                             }
                         ),
@@ -102,31 +98,29 @@ defined('KRYSTAL') or die;
                 </div>
 
                 <div class="col-lg-6">
-                    <form data-group="field">
-                        <div class="well">
-                            <h2><i class="glyphicon glyphicon-pencil"></i> <?php $this->show(!$field->getId() ? 'Add new field' : 'Edit the field'); ?></h2>
-                            <br />
+                    <form data-group="field" autocomplete="off">
+                        <h2><i class="glyphicon glyphicon-pencil"></i> <?php $this->show(!$field->getId() ? 'Add new field' : 'Edit the field'); ?></h2>
+                        <br />
 
-                            <?php echo Element::hidden('field[id]', $field->getId()); ?>
-                            <?php echo Element::hidden('field[category_id]', $category->getId()); ?>
+                        <?php echo Element::hidden('field[id]', $field->getId()); ?>
+                        <?php echo Element::hidden('field[category_id]', $category->getId()); ?>
 
-                            <div class="form-group">
-                                <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-                                <div class="col-lg-10">
-                                    <div class="input-group">
-                                        <?php echo Element::text('field[name]', $field->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Field name'))); ?>
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                                    </div>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label"><?php $this->show('Name'); ?></label>
+                            <div class="col-lg-10">
+                                <div class="input-group">
+                                    <?php echo Element::text('field[name]', $field->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Field name'))); ?>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label class="col-lg-2 control-label"><?php $this->show('Type'); ?></label>
-                                <div class="col-lg-10">
-                                    <div class="input-group">
-                                        <?php echo Element::select('field[type]', $this->translateArray($fieldTypes), $field->getType(), array('class' => 'form-control')); ?>
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                                    </div>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label"><?php $this->show('Type'); ?></label>
+                            <div class="col-lg-10">
+                                <div class="input-group">
+                                    <?php echo Element::select('field[type]', $this->translateArray($fieldTypes), $field->getType(), array('class' => 'form-control')); ?>
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                                 </div>
                             </div>
                         </div>

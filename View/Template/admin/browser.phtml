@@ -33,6 +33,7 @@ defined('KRYSTAL') or die;
 
 <div class="row">
     <div class="col-lg-7">
+        <div class="card">
         <?php $this->loadPartial('items-per-page', array('caption' => 'HTML Blocks')); ?>
 
         <form>
@@ -99,47 +100,50 @@ defined('KRYSTAL') or die;
             </div>
         </form>
 
-        <?php $this->loadPartial('paginator'); ?>        
+        <?php $this->loadPartial('paginator'); ?>
+        </div>
     </div>
 
     <div class="col-lg-5">
-        <h2><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h2>
+        <div class="card">
+            <h2><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h2>
 
-        <?= $this->widget(new GridViewWidget($categories, array(
-            'pk' => 'id',
-            'tableClass' => 'table table-hover table-bordered table-striped',
-            'columns' => array(
-                array(
-                    'column' => 'id',
-                    'label' => '#'
+            <?= $this->widget(new GridViewWidget($categories, array(
+                'pk' => 'id',
+                'tableClass' => 'table table-hover table-bordered table-striped',
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
+
+                    array(
+                        'column' => 'name',
+                    ),
+
+                    array(
+                        'column' => 'field_count',
+                        'label' => 'Field count'
+                    )
                 ),
 
-                array(
-                    'column' => 'name',
-                ),
+                'actions' => array(
+                    'edit' => function($row){
+                        return Icon::edit(
+                            $this->url('Block:Admin:Category@editAction', $row['id']),
+                            $this->translate('Edit this category')
+                        );
+                    },
 
-                array(
-                    'column' => 'field_count',
-                    'label' => 'Field count'
+                    'remove' => function($row){
+                        return Icon::remove(
+                            $this->url('Block:Admin:Category@deleteAction', $row['id']),
+                            $this->translate('Remove this category')
+                        );
+                    }
                 )
-            ),
-
-            'actions' => array(
-                'edit' => function($row){
-                    return Icon::edit(
-                        $this->url('Block:Admin:Category@editAction', $row['id']),
-                        $this->translate('Edit this category')
-                    );
-                },
-
-                'remove' => function($row){
-                    return Icon::remove(
-                        $this->url('Block:Admin:Category@deleteAction', $row['id']),
-                        $this->translate('Remove this category')
-                    );
-                }
-            )
-        ))); ?>
+            ))); ?>
+        </div>
     </div>
 </div>
 
