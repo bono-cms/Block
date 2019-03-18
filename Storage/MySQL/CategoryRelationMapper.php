@@ -12,8 +12,9 @@
 namespace Block\Storage\MySQL;
 
 use Cms\Storage\MySQL\AbstractMapper;
+use Block\Storage\CategoryRelationMapperInterface;
 
-final class CategoryRelationMapper extends AbstractMapper
+final class CategoryRelationMapper extends AbstractMapper implements CategoryRelationMapperInterface
 {
     /**
      * {@inheritDoc}
