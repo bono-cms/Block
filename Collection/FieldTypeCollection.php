@@ -18,6 +18,7 @@ final class FieldTypeCollection extends ArrayCollection
     const TYPE_TEXT = 1;
     const TYPE_TEXTAREA = 2;
     const TYPE_NUMBER = 3;
+    const TYPE_BOOLEAN = 4;
 
     /**
      * {@inheritDoc}
@@ -25,6 +26,7 @@ final class FieldTypeCollection extends ArrayCollection
     protected $collection = array(
         self::TYPE_TEXT => 'Text',
         self::TYPE_TEXTAREA => 'Textarea',
-        self::TYPE_NUMBER => 'Number'
+        self::TYPE_NUMBER => 'Number',
+        self::TYPE_BOOLEAN => 'Boolean'
     );
 }
