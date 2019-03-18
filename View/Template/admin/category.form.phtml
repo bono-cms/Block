@@ -1,8 +1,9 @@
 <?php
 
+use Krystal\Widget\GridView\GridViewWidget;
 use Krystal\Form\Element;
-use Krystal\Grid\Grid;
 use Block\Collection\FieldTypeCollection;
+use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
 
@@ -51,10 +52,9 @@ defined('KRYSTAL') or die;
                 <div class="col-lg-6">
                     <h2><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Fields'); ?> <small>(<?= count($fields); ?>)</small></h2>
 
-                    <?= Grid::render($fields, array(
-                        // A column to be considered as a primary key
+                    <?= $this->widget(new GridViewWidget($fields, array(
                         'pk' => 'id',
-                        'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                        'tableClass' => 'table table-hover table-bordered table-striped',
                         'rowAttributes' => array(
                             'class' => function($row) use ($field){
                                 if ($row->getId() == $field->getId()){
@@ -85,15 +85,20 @@ defined('KRYSTAL') or die;
 
                         'actions' => array(
                             'edit' => function($row){
-                                return Element::icon('glyphicon glyphicon-pencil', $this->url('Block:Admin:CategoryField@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this category'), 'data-button' => 'edit'));
+                                return Icon::edit(
+                                    $this->url('Block:Admin:CategoryField@editAction', $row['id']),
+                                    $this->translate('Edit this category')
+                                );
                             },
 
                             'remove' => function($row){
-                                return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this category'), 'data-button' => 'delete', 'data-url' => $this->url('Block:Admin:CategoryField@deleteAction', $row['id'])));
+                                return Icon::remove(
+                                    $this->url('Block:Admin:CategoryField@deleteAction', $row['id']),
+                                    $this->translate('Remove this category')
+                                );
                             }
                         )
-
-                    ), $this->translator); ?>    
+                    ))); ?>
                 </div>
 
                 <div class="col-lg-6">

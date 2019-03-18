@@ -1,7 +1,8 @@
 <?php
 
-use Krystal\Grid\Grid;
 use Krystal\Form\Element;
+use Krystal\Widget\GridView\GridViewWidget;
+use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
 
@@ -104,10 +105,9 @@ defined('KRYSTAL') or die;
     <div class="col-lg-5">
         <h2><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h2>
 
-        <?= Grid::render($categories, array(
-            // A column to be considered as a primary key
+        <?= $this->widget(new GridViewWidget($categories, array(
             'pk' => 'id',
-            'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+            'tableClass' => 'table table-hover table-bordered table-striped',
             'columns' => array(
                 array(
                     'column' => 'id',
@@ -126,15 +126,20 @@ defined('KRYSTAL') or die;
 
             'actions' => array(
                 'edit' => function($row){
-                    return Element::icon('glyphicon glyphicon-pencil', $this->url('Block:Admin:Category@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this category'), 'data-button' => 'edit'));
+                    return Icon::edit(
+                        $this->url('Block:Admin:Category@editAction', $row['id']),
+                        $this->translate('Edit this category')
+                    );
                 },
 
                 'remove' => function($row){
-                    return Element::icon('glyphicon glyphicon-remove', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this category'), 'data-button' => 'delete', 'data-url' => $this->url('Block:Admin:Category@deleteAction', $row['id'])));
+                    return Icon::remove(
+                        $this->url('Block:Admin:Category@deleteAction', $row['id']),
+                        $this->translate('Remove this category')
+                    );
                 }
             )
-
-        ), $this->translator); ?>
+        ))); ?>
     </div>
 </div>
 
