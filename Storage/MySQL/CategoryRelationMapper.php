@@ -23,4 +23,38 @@ final class CategoryRelationMapper extends AbstractMapper implements CategoryRel
     {
         return self::getWithPrefix('bono_module_block_categories_relation');
     }
+
+    /**
+     * Finds all fields by page ID
+     * 
+     * @param int $id Page id
+     * @return array
+     */
+    public function findAllByPageId($id)
+    {
+        // Columns to be selected
+        $columns = array(
+            CategoryFieldMapper::column('id') => 'field_id',
+            CategoryRelationTranslationMapper::column('lang_id'),
+            CategoryFieldMapper::column('name'),
+            CategoryFieldMapper::column('type'),
+            CategoryRelationTranslationMapper::column('value'),
+        );
+
+        $db = $this->db->select($columns)
+                       ->from(CategoryFieldMapper::getTableName())
+                       ->join('LEFT', self::getTableName(), array(
+                            CategoryFieldMapper::column('id') => self::getRawColumn('field_id'),
+                            self::column('page_id') => (int) $id
+                       ))
+                       // Translation relation
+                       ->leftJoin(CategoryRelationTranslationMapper::getTableName(), array(
+                            CategoryRelationTranslationMapper::column('id') => CategoryFieldMapper::getRawColumn('id')
+                       ))
+                       // Sort by latest
+                       ->orderBy(self::column('id'))
+                       ->desc();
+
+        return $db->queryAll();
+    }
 }

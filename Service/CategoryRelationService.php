@@ -33,4 +33,15 @@ final class CategoryRelationService extends AbstractManager
     {
         $this->categoryRelationMapper = $categoryRelationMapper;
     }
+
+    /**
+     * Finds all records by page ID
+     * 
+     * @param int $id Page id
+     * @return array
+     */
+    public function findAllByPageId($id)
+    {
+        return $this->categoryRelationMapper->findAllByPageId($id);
+    }
 }
