@@ -14,6 +14,7 @@ namespace Block\Service;
 use Cms\Service\AbstractManager;
 use Block\Storage\CategoryMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Stdlib\ArrayUtils;
 
 final class CategoryService extends AbstractManager
 {
@@ -49,6 +50,16 @@ final class CategoryService extends AbstractManager
         }
 
         return $entity;
+    }
+
+    /**
+     * Fetch categories as a hash list
+     * 
+     * @return array
+     */
+    public function fetchList()
+    {
+        return ArrayUtils::arrayList($this->categoryMapper->fetchAll(), 'id', 'name');
     }
 
     /**
