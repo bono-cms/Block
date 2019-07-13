@@ -12,7 +12,10 @@ defined('KRYSTAL') or die;
 <div class="card">
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="nav-item active"><a class="nav-link" href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
+
+        <?php if ($category->getId()): ?>
         <li role="presentation" class="nav-item"><a class="nav-link" href="#fields" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Fields'); ?></a></li>
+        <?php endif; ?>
     </ul>
 
     <div class="tab-content">
@@ -41,6 +44,7 @@ defined('KRYSTAL') or die;
             </form>                
         </div>
 
+        <?php if ($category->getId()): ?>
         <div class="tab-pane fade in" id="fields" role="tabpanel">
             <div class="row">
                 <div class="col-lg-6">
@@ -135,5 +139,6 @@ defined('KRYSTAL') or die;
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </div>
