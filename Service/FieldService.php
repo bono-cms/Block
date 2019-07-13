@@ -12,7 +12,9 @@
 namespace Block\Service;
 
 use Krystal\Stdlib\ArrayUtils;
+use Krystal\Stdlib\VirtualEntity;
 use Block\Storage\SharedFieldInterface;
+use Block\Collection\FieldTypeCollection;
 
 /**
  * Shared service for modules that use custom fields
@@ -72,6 +74,36 @@ final class FieldService
         }
 
         return true;
+    }
+
+    /**
+     * Append fields on page entity
+     * 
+     * @param \Krystal\Stdlib\VirtualEntity $page
+     * @return void
+     */
+    public function appendFields(VirtualEntity $page)
+    {
+        $id = $page->getId();
+
+        // If entity has id
+        if ($id) {
+            $rows = $this->fieldMapper->findFields($id);
+            $output = array();
+
+            // Start preparing data
+            foreach($rows as $row){
+                // Special case to convert to boolean
+                if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN){
+                    $row['value'] = boolval($row['value']);
+                }
+
+                $output[$row['id']] = $row['value'];
+            }
+
+            // Append prepared data
+            $page->setFields($output);
+        }
     }
 
     /**
