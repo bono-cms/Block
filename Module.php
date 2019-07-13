@@ -14,6 +14,9 @@ namespace Block;
 use Cms\AbstractCmsModule;
 use Block\Service\BlockManager;
 use Block\Service\SiteService;
+use Block\Service\CategoryService;
+use Block\Service\CategoryFieldService;
+use Block\Service\CategoryRelationService;
 
 final class Module extends AbstractCmsModule
 {
@@ -26,7 +29,10 @@ final class Module extends AbstractCmsModule
 
         return array(
             'siteService' => new SiteService($blockMapper),
-            'blockManager' => new BlockManager($blockMapper, $this->getHistoryManager())
+            'blockManager' => new BlockManager($blockMapper, $this->getHistoryManager()),
+            'categoryService' => new CategoryService($this->getMapper('/Block/Storage/MySQL/CategoryMapper')),
+            'categoryFieldService' => new CategoryFieldService($this->getMapper('/Block/Storage/MySQL/CategoryFieldMapper')),
+            'categoryRelationService' => new CategoryRelationService($this->getMapper('/Block/Storage/MySQL/CategoryRelationMapper'))
         );
     }
 }
