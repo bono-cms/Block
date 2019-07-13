@@ -98,6 +98,11 @@ final class FieldService
                     $row['value'] = boolval($row['value']);
                 }
 
+                // Turn a string into array, if required
+                if ($row['type'] == FieldTypeCollection::TYPE_ARRAY) {
+                    $row['value'] = explode(PHP_EOL, $row['value']);
+                }
+
                 $output[$row['id']] = $row['value'];
             }
 
