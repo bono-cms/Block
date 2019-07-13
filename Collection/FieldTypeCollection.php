@@ -19,6 +19,7 @@ final class FieldTypeCollection extends ArrayCollection
     const TYPE_TEXTAREA = 2;
     const TYPE_NUMBER = 3;
     const TYPE_BOOLEAN = 4;
+    const TYPE_WYSIWYG = 5;
 
     /**
      * {@inheritDoc}
@@ -27,6 +28,7 @@ final class FieldTypeCollection extends ArrayCollection
         self::TYPE_TEXT => 'Text',
         self::TYPE_TEXTAREA => 'Textarea',
         self::TYPE_NUMBER => 'Number',
-        self::TYPE_BOOLEAN => 'Boolean'
+        self::TYPE_BOOLEAN => 'Boolean',
+        self::TYPE_WYSIWYG => 'WYSIWYG'
     );
 }
