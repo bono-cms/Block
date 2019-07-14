@@ -161,6 +161,35 @@ final class FieldService
     }
 
     /**
+     * Append field translations
+     * 
+     * @param int $pageId
+     * @param array $raw
+     * @return array
+     */
+    private function appendTranslations($pageId, array $raw)
+    {
+        // Find attached translations (to be merged)
+        $translations = $this->fieldMapper->findTranslationsByPageId($pageId);
+
+        foreach ($raw as $index => $field) {
+            foreach ($translations as $translation) {
+                
+                if ($translation['field_id'] == $field['id']) {
+                    // Create if not created
+                    if (!isset($raw[$index]['translations'])) {
+                        $raw[$index]['translations'] = array();
+                    }
+                    
+                    $raw[$index]['translations'][$translation['lang_id']] = $translation['value'];
+                }
+            }
+        }
+
+        return $raw;
+    }
+    
+    /**
      * Returns attached fields with their values
      * 
      * @param int $pageId
@@ -177,6 +206,9 @@ final class FieldService
         // Give them meaningful key names now
         $groups['regular'] = $groups[0];
         $groups['translatable'] = $groups[1];
+
+        // Append translations
+        $groups['translatable'] = $this->appendTranslations($pageId, $groups['translatable']);
 
         // And unset numbers
         unset($groups[0], $groups[1]);
