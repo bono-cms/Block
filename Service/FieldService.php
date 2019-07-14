@@ -81,10 +81,10 @@ final class FieldService
             ];
         }
 
-        return [
+        return array(
             'options' => $options,
             'translations' => $localizations
-        ];
+        );
     }
 
     /**
