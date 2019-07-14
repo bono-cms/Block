@@ -100,18 +100,16 @@ final class FieldService
         // Remove previous values
         $this->fieldMapper->deleteByColumn('page_id', $pageId);
 
-        // If there are no translatable fields
-        if (empty($translations)) {
-            foreach ($fields as $id => $value) {
-                $data = array(
-                    'page_id' => $pageId,
-                    'field_id' => $id,
-                    'value' => $value
-                );
+        foreach ($fields as $id => $value) {
+            $this->fieldMapper->persist(array(
+                'page_id' => $pageId,
+                'field_id' => $id,
+                'value' => $value
+            ));
+        }
 
-                $this->fieldMapper->persist($data);
-            }
-        } else {
+        // If there are no translatable fields, then save them
+        if (!empty($translations)) {
             // Otherwise save with translatable fields
             $data = self::parseLocalizedInput($pageId, $translations);
 
