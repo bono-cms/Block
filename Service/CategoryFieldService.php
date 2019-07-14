@@ -44,7 +44,8 @@ final class CategoryFieldService extends AbstractManager
         $entity->setId($row['id'], VirtualEntity::FILTER_INT)
                ->setCategoryId($row['category_id'], VirtualEntity::FILTER_INT)
                ->setName($row['name'], VirtualEntity::FILTER_TAGS)
-               ->setType($row['type'], VirtualEntity::FILTER_INT);
+               ->setType($row['type'], VirtualEntity::FILTER_INT)
+               ->setTranslatable($row['translatable'], VirtualEntity::FILTER_BOOL);
 
         return $entity;
     }

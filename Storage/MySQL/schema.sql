@@ -28,6 +28,7 @@ CREATE TABLE `bono_module_block_category_fields` (
     `category_id` INT NOT NULL COMMENT 'Category ID',
     `name` varchar(255) NOT NULL COMMENT 'Field name',
     `type` SMALLINT NOT NULL COMMENT 'Field type constant',
+    `translatable` BOOLEAN NOT NULL COMMENT 'Whether this field can have translations',
 
     FOREIGN KEY (category_id) REFERENCES bono_module_block_categories(id) ON DELETE CASCADE
 ) DEFAULT CHARSET = UTF8;

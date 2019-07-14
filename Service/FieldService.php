@@ -52,25 +52,72 @@ final class FieldService
     }
 
     /**
-     * Save fields
+     * Parse input that contains translatable fields
      * 
      * @param int $pageId
+     * @param array $translatable
+     * @return array
+     */
+    private static function parseLocalizedInput($pageId, array $translations)
+    {
+        $rows = $options = array();
+
+        foreach ($translations as $langId => $data) {
+            foreach($data as $fieldId => $value) {
+                $rows[] = array(
+                    'field_id' => $fieldId,
+                    'lang_id' => $langId,
+                    'value' => $value
+                );
+            }
+        }
+
+        $localizations = ArrayUtils::arrayPartition($rows, 'field_id', false);
+
+        foreach ($localizations as $fieldId => $inner) {
+            $options[] = [
+                'page_id' => $pageId,
+                'field_id' => $fieldId
+            ];
+        }
+
+        return [
+            'options' => $options,
+            'translations' => $localizations
+        ];
+    }
+
+    /**
+     * Save fields
+     * 
+     * @param int $pageId Current page id
      * @param array $fields
+     * @param array $translations
      * @return boolean
      */
-    public function saveFields($pageId, array $fields)
+    public function saveFields($pageId, array $fields, array $translations = array())
     {
         // Remove previous values
         $this->fieldMapper->deleteByColumn('page_id', $pageId);
 
         foreach ($fields as $id => $value) {
-            $data = array(
+            $this->fieldMapper->persist(array(
                 'page_id' => $pageId,
                 'field_id' => $id,
                 'value' => $value
-            );
+            ));
+        }
 
-            $this->fieldMapper->persist($data);
+        // If there are no translatable fields, then save them
+        if (!empty($translations)) {
+            // Otherwise save with translatable fields
+            $data = self::parseLocalizedInput($pageId, $translations);
+
+            foreach ($data['options'] as $field) {
+                $locales = $data['translations'][$field['field_id']];
+
+                $this->fieldMapper->saveEntity($field, $locales);
+            }
         }
 
         return true;
@@ -88,19 +135,30 @@ final class FieldService
 
         // If entity has id
         if ($id) {
-            $rows = $this->fieldMapper->findFields($id);
             $output = array();
+            $rows = $this->fieldMapper->findFields($id);
+
+            // Find translations
+            $fieldIds = array_column($rows, 'id');
+
+            // Find and normalize translations
+            $translations = ArrayUtils::arrayList($this->fieldMapper->findActiveTranslations($fieldIds), 'field_id', 'value');
 
             // Start preparing data
             foreach($rows as $row){
                 // Special case to convert to boolean
-                if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN){
+                if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN) {
                     $row['value'] = boolval($row['value']);
                 }
 
                 // Turn a string into array, if required
                 if ($row['type'] == FieldTypeCollection::TYPE_ARRAY) {
                     $row['value'] = explode(PHP_EOL, $row['value']);
+                }
+
+                // Override value from current language session, if translatable field encountered
+                if ($row['translatable'] == 1 && isset($translations[$row['id']])) {
+                    $row['value'] = $translations[$row['id']];
                 }
 
                 $output[$row['id']] = $row['value'];
@@ -112,6 +170,35 @@ final class FieldService
     }
 
     /**
+     * Append field translations
+     * 
+     * @param int $pageId
+     * @param array $raw
+     * @return array
+     */
+    private function appendTranslations($pageId, array $raw)
+    {
+        // Find attached translations (to be merged)
+        $translations = $this->fieldMapper->findTranslationsByPageId($pageId);
+
+        foreach ($raw as $index => $field) {
+            foreach ($translations as $translation) {
+                
+                if ($translation['field_id'] == $field['id']) {
+                    // Create if not created
+                    if (!isset($raw[$index]['translations'])) {
+                        $raw[$index]['translations'] = array();
+                    }
+                    
+                    $raw[$index]['translations'][$translation['lang_id']] = $translation['value'];
+                }
+            }
+        }
+
+        return $raw;
+    }
+    
+    /**
      * Returns attached fields with their values
      * 
      * @param int $pageId
@@ -119,7 +206,28 @@ final class FieldService
      */
     public function getFields($pageId)
     {
-        return ArrayUtils::arrayPartition($this->fieldMapper->findFields($pageId), 'category');
+        // Grab raw rows first
+        $rows = $this->fieldMapper->findFields($pageId);
+
+        // Separate by translatable and non-translatable attributes
+        $groups = ArrayUtils::arrayPartition($rows, 'translatable', false);
+
+        // Give them meaningful key names now
+        $groups['regular'] = $groups[0];
+        $groups['translatable'] = $groups[1];
+
+        // Append translations
+        $groups['translatable'] = $this->appendTranslations($pageId, $groups['translatable']);
+
+        // And unset numbers
+        unset($groups[0], $groups[1]);
+
+        // Now separate groups by categories. This simplifies rendering
+        foreach ($groups as $name => $group) {
+            $groups[$name] = ArrayUtils::arrayPartition($groups[$name], 'category', false);
+        }
+
+        return $groups;
     }
 
     /**
