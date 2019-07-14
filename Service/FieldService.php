@@ -52,25 +52,74 @@ final class FieldService
     }
 
     /**
-     * Save fields
+     * Parse input that contains translatable fields
      * 
      * @param int $pageId
+     * @param array $translatable
+     * @return array
+     */
+    private static function parseLocalizedInput($pageId, array $translations)
+    {
+        $rows = $options = array();
+
+        foreach ($translations as $langId => $data) {
+            foreach($data as $fieldId => $value) {
+                $rows[] = array(
+                    'field_id' => $fieldId,
+                    'lang_id' => $langId,
+                    'value' => $value
+                );
+            }
+        }
+
+        $localizations = ArrayUtils::arrayPartition($rows, 'field_id', false);
+
+        foreach ($localizations as $fieldId => $inner) {
+            $options[] = [
+                'page_id' => $pageId,
+                'field_id' => $fieldId
+            ];
+        }
+
+        return [
+            'options' => $options,
+            'translations' => $localizations
+        ];
+    }
+
+    /**
+     * Save fields
+     * 
+     * @param int $pageId Current page id
      * @param array $fields
+     * @param array $translations
      * @return boolean
      */
-    public function saveFields($pageId, array $fields)
+    public function saveFields($pageId, array $fields, array $translations = array())
     {
         // Remove previous values
         $this->fieldMapper->deleteByColumn('page_id', $pageId);
 
-        foreach ($fields as $id => $value) {
-            $data = array(
-                'page_id' => $pageId,
-                'field_id' => $id,
-                'value' => $value
-            );
+        // If there are no translatable fields
+        if (empty($translations)) {
+            foreach ($fields as $id => $value) {
+                $data = array(
+                    'page_id' => $pageId,
+                    'field_id' => $id,
+                    'value' => $value
+                );
 
-            $this->fieldMapper->persist($data);
+                $this->fieldMapper->persist($data);
+            }
+        } else {
+            // Otherwise save with translatable fields
+            $data = self::parseLocalizedInput($pageId, $translations);
+
+            foreach ($data['options'] as $field) {
+                $locales = $data['translations'][$field['field_id']];
+
+                $this->fieldMapper->saveEntity($field, $locales);
+            }
         }
 
         return true;
