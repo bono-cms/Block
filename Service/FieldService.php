@@ -119,7 +119,25 @@ final class FieldService
      */
     public function getFields($pageId)
     {
-        return ArrayUtils::arrayPartition($this->fieldMapper->findFields($pageId), 'category');
+        // Grab raw rows first
+        $rows = $this->fieldMapper->findFields($pageId);
+
+        // Separate by translatable and non-translatable attributes
+        $groups = ArrayUtils::arrayPartition($rows, 'translatable', false);
+
+        // Give them meaningful key names now
+        $groups['regular'] = $groups[0];
+        $groups['translatable'] = $groups[1];
+
+        // And unset numbers
+        unset($groups[0], $groups[1]);
+
+        // Now separate groups by categories. This simplifies rendering
+        foreach ($groups as $name => $group) {
+            $groups[$name] = ArrayUtils::arrayPartition($groups[$name], 'category', false);
+        }
+
+        return $groups;
     }
 
     /**
