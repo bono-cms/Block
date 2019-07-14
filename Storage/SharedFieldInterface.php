@@ -14,6 +14,14 @@ namespace Block\Storage;
 interface SharedFieldInterface
 {
     /**
+     * Find field translation by associated page id
+     * 
+     * @param int $id Page id
+     * @return array
+     */
+    public function findTranslationsByPageId($id);
+
+    /**
      * Find attached fields by page id
      * 
      * @param int $id
