@@ -135,19 +135,30 @@ final class FieldService
 
         // If entity has id
         if ($id) {
-            $rows = $this->fieldMapper->findFields($id);
             $output = array();
+            $rows = $this->fieldMapper->findFields($id);
+
+            // Find translations
+            $fieldIds = array_column($rows, 'id');
+
+            // Find and normalize translations
+            $translations = ArrayUtils::arrayList($this->fieldMapper->findActiveTranslations($fieldIds), 'field_id', 'value');
 
             // Start preparing data
             foreach($rows as $row){
                 // Special case to convert to boolean
-                if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN){
+                if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN) {
                     $row['value'] = boolval($row['value']);
                 }
 
                 // Turn a string into array, if required
                 if ($row['type'] == FieldTypeCollection::TYPE_ARRAY) {
                     $row['value'] = explode(PHP_EOL, $row['value']);
+                }
+
+                // Override value from current language session, if translatable field encountered
+                if ($row['translatable'] == 1 && isset($translations[$row['id']])) {
+                    $row['value'] = $translations[$row['id']];
                 }
 
                 $output[$row['id']] = $row['value'];
