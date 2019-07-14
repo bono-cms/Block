@@ -209,25 +209,29 @@ final class FieldService
         // Grab raw rows first
         $rows = $this->fieldMapper->findFields($pageId);
 
-        // Separate by translatable and non-translatable attributes
-        $groups = ArrayUtils::arrayPartition($rows, 'translatable', false);
+        if (!empty($rows)) {
+            // Separate by translatable and non-translatable attributes
+            $groups = ArrayUtils::arrayPartition($rows, 'translatable', false);
 
-        // Give them meaningful key names now
-        $groups['regular'] = $groups[0];
-        $groups['translatable'] = $groups[1];
+            // Give them meaningful key names now
+            $groups['regular'] = $groups[0];
+            $groups['translatable'] = $groups[1];
 
-        // Append translations
-        $groups['translatable'] = $this->appendTranslations($pageId, $groups['translatable']);
+            // Append translations
+            $groups['translatable'] = $this->appendTranslations($pageId, $groups['translatable']);
 
-        // And unset numbers
-        unset($groups[0], $groups[1]);
+            // And unset numbers
+            unset($groups[0], $groups[1]);
 
-        // Now separate groups by categories. This simplifies rendering
-        foreach ($groups as $name => $group) {
-            $groups[$name] = ArrayUtils::arrayPartition($groups[$name], 'category', false);
+            // Now separate groups by categories. This simplifies rendering
+            foreach ($groups as $name => $group) {
+                $groups[$name] = ArrayUtils::arrayPartition($groups[$name], 'category', false);
+            }
+
+            return $groups;
+        } else {
+            return array();
         }
-
-        return $groups;
     }
 
     /**
