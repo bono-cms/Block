@@ -28,16 +28,6 @@ defined('KRYSTAL') or die;
                     <?php $this->loadPartial('language-name', array('language' => $language)); ?>
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
-                        <div class="col-lg-10">
-                            <div class="input-group">
-                                <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'readonly' => !$extendedMode, 'placeholder' => $this->translate("Block's name"))); ?>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <label class="col-lg-2 control-label"><?php $this->show('Content'); ?></label>
                         <div class="col-lg-10">
                             <div class="input-group">
@@ -53,6 +43,16 @@ defined('KRYSTAL') or die;
 
         <div role="tabpanel" class="tab-pane" id="configuration">
             <?php echo Element::hidden('block[id]', $entity->getId()); ?>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                <div class="col-lg-10">
+                    <div class="input-group">
+                        <?php echo Element::text('block[name]', $entity->getName(), array('class' => 'form-control')); ?>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                    </div>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Class'); ?></label>
