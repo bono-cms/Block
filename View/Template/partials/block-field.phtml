@@ -4,9 +4,11 @@ use Krystal\Form\Element;
 
 ?>
 
+<?php if (isset($blockCategories, $activeBlockCategoryIds)): ?>
 <div class="form-group">
     <label class="col-lg-12 control-label"><?php $this->show('Attached field categories'); ?></label>
     <div class="col-lg-10">
         <?= Element::select('block[]', $blockCategories, $activeBlockCategoryIds, array('multiple' => true, 'class' => 'form-control')); ?>
     </div>
 </div>
+<?php endif; ?>
