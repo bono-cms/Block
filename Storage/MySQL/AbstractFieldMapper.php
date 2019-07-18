@@ -28,24 +28,24 @@ abstract class AbstractFieldMapper extends AbstractMapper implements SharedField
     /**
      * Find attached category ids
      * 
-     * @param int $pageId Target page id
+     * @param int $id Target entity id
      * @return array
      */
-    final public function findAttachedSlaves($pageId)
+    final public function findAttachedSlaves($id)
     {
-        return $this->getSlaveIdsFromJunction(static::getRelationTable(), $pageId);
+        return $this->getSlaveIdsFromJunction(static::getRelationTable(), $id);
     }
 
     /**
      * Save junction relation
      * 
-     * @param int $pageId Target page id
+     * @param int $id Target entity id
      * @param array $slaveIds
      * @return boolean
      */
-    final public function saveRelation($pageId, array $slaveIds)
+    final public function saveRelation($id, array $slaveIds)
     {
-        return $this->syncWithJunction(static::getRelationTable(), $pageId, $slaveIds);
+        return $this->syncWithJunction(static::getRelationTable(), $id, $slaveIds);
     }
 
     /**
