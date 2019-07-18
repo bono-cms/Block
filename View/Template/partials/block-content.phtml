@@ -7,11 +7,11 @@ use Block\View\FieldMaker;
 <?php if (!empty($fields)): ?>
 <div role="tabpanel" class="tab-pane" id="fields">
     <ul class="nav nav-tabs" role="tablist">
-        <?php if (isset($fields['regular'])): ?>
+        <?php if (isset($fields['data']['regular'])): ?>
         <li role="presentation" class="nav-item active"><a class="nav-link" href="#fields-main" role="tab" data-toggle="tab"><?php $this->show('Shared fields'); ?></a></li>
         <?php endif; ?>
 
-        <?php if (isset($fields['translatable'])): ?>
+        <?php if (isset($fields['data']['translatable'])): ?>
         <?php foreach ($languages as $index => $language): ?>
         <li role="presentation" class="nav-item"><a class="nav-link" href="#field-language-<?= $language->getId(); ?>" role="tab" data-toggle="tab"><?php $this->show('Fields'); ?> <small>(<?= $language->getName(); ?>)</small></a></li>
         <?php endforeach; ?>
@@ -19,9 +19,9 @@ use Block\View\FieldMaker;
     </ul>
 
     <div class="tab-content">
-        <?php if (isset($fields['regular'])): ?>
+        <?php if (isset($fields['data']['regular'])): ?>
         <div role="tabpanel" class="tab-pane active show" id="fields-main">
-            <?php foreach ($fields['regular'] as $category => $items): ?>
+            <?php foreach ($fields['data']['regular'] as $category => $items): ?>
               <fieldset>
                 <legend class="container"><?= $category; ?></legend>
 
@@ -39,13 +39,13 @@ use Block\View\FieldMaker;
         </div>
         <?php endif; ?>
 
-        <?php if (isset($fields['translatable'])): ?>
+        <?php if (isset($fields['data']['translatable'])): ?>
         <?php foreach ($languages as $index => $language): ?>
         <div role="tabpanel" class="tab-pane" id="field-language-<?= $language->getId(); ?>">
             <div>
                 <?php $this->loadPartial('language-name', array('language' => $language)); ?>
 
-                <?php foreach ($fields['translatable'] as $category => $items): ?>
+                <?php foreach ($fields['data']['translatable'] as $category => $items): ?>
                   <fieldset>
                     <legend class="container"><?= $category; ?></legend>
 

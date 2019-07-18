@@ -1,3 +1,4 @@
+
 <?php if (!empty($fields)): ?>
-<li role="presentation" class="nav-item"><a class="nav-link" href="#fields" role="tab" data-toggle="tab"><i class="fas fa-stream"></i> <?php $this->show('Extra fields'); ?></a></li>
+<li role="presentation" class="nav-item"><a class="nav-link" href="#fields" role="tab" data-toggle="tab"><i class="fas fa-stream"></i> <?php $this->show('Extra fields'); ?> <small>(<?= $fields['count']; ?>)</small></a></li>
 <?php endif; ?>

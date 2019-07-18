@@ -209,6 +209,10 @@ final class FieldService
         // Grab raw rows first
         $rows = $this->fieldMapper->findFields($id);
 
+        // Get count
+        $types = array_column($rows, 'type');
+        $count = count($types);
+
         if (!empty($rows)) {
             // Separate by translatable and non-translatable attributes
             $groups = ArrayUtils::arrayPartition($rows, 'translatable', false);
@@ -228,7 +232,11 @@ final class FieldService
                 $groups[$name] = ArrayUtils::arrayPartition($groups[$name], 'category', false);
             }
 
-            return $groups;
+            return array(
+                'data' => $groups,
+                'count' => $count
+            );
+
         } else {
             return array();
         }
