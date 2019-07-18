@@ -54,11 +54,11 @@ final class FieldService
     /**
      * Parse input that contains translatable fields
      * 
-     * @param int $pageId
+     * @param int $id Entity id
      * @param array $translatable
      * @return array
      */
-    private static function parseLocalizedInput($pageId, array $translations)
+    private static function parseLocalizedInput($id, array $translations)
     {
         $rows = $options = array();
 
@@ -76,7 +76,7 @@ final class FieldService
 
         foreach ($localizations as $fieldId => $inner) {
             $options[] = [
-                'page_id' => $pageId,
+                'entity_id' => $id,
                 'field_id' => $fieldId
             ];
         }
@@ -90,20 +90,20 @@ final class FieldService
     /**
      * Save fields
      * 
-     * @param int $pageId Current page id
+     * @param int $entity Current entity id
      * @param array $fields
      * @param array $translations
      * @return boolean
      */
-    public function saveFields($pageId, array $fields, array $translations = array())
+    public function saveFields($id, array $fields, array $translations = array())
     {
         // Remove previous values
-        $this->fieldMapper->deleteByColumn('page_id', $pageId);
+        $this->fieldMapper->deleteByColumn('entity_id', $id);
 
-        foreach ($fields as $id => $value) {
+        foreach ($fields as $fieldId => $value) {
             $this->fieldMapper->persist(array(
-                'page_id' => $pageId,
-                'field_id' => $id,
+                'entity_id' => $id,
+                'field_id' => $fieldId,
                 'value' => $value
             ));
         }
@@ -111,7 +111,7 @@ final class FieldService
         // If there are no translatable fields, then save them
         if (!empty($translations)) {
             // Otherwise save with translatable fields
-            $data = self::parseLocalizedInput($pageId, $translations);
+            $data = self::parseLocalizedInput($id, $translations);
 
             foreach ($data['options'] as $field) {
                 $locales = $data['translations'][$field['field_id']];
@@ -124,14 +124,14 @@ final class FieldService
     }
 
     /**
-     * Append fields on page entity
+     * Append fields on an entity
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $page
+     * @param \Krystal\Stdlib\VirtualEntity $entity
      * @return void
      */
-    public function appendFields(VirtualEntity $page)
+    public function appendFields(VirtualEntity $entity)
     {
-        $id = $page->getId();
+        $id = $entity->getId();
 
         // If entity has id
         if ($id) {
@@ -165,21 +165,21 @@ final class FieldService
             }
 
             // Append prepared data
-            $page->setFields($output);
+            $entity->setFields($output);
         }
     }
 
     /**
      * Append field translations
      * 
-     * @param int $pageId
+     * @param int $id Entity id
      * @param array $raw
      * @return array
      */
-    private function appendTranslations($pageId, array $raw)
+    private function appendTranslations($id, array $raw)
     {
         // Find attached translations (to be merged)
-        $translations = $this->fieldMapper->findTranslationsByPageId($pageId);
+        $translations = $this->fieldMapper->findTranslationsByEntityId($id);
 
         foreach ($raw as $index => $field) {
             foreach ($translations as $translation) {
@@ -201,13 +201,13 @@ final class FieldService
     /**
      * Returns attached fields with their values
      * 
-     * @param int $pageId
+     * @param int $id Entity id
      * @return array
      */
-    public function getFields($pageId)
+    public function getFields($id)
     {
         // Grab raw rows first
-        $rows = $this->fieldMapper->findFields($pageId);
+        $rows = $this->fieldMapper->findFields($id);
 
         if (!empty($rows)) {
             // Separate by translatable and non-translatable attributes
@@ -218,7 +218,7 @@ final class FieldService
             $groups['translatable'] = $groups[1];
 
             // Append translations
-            $groups['translatable'] = $this->appendTranslations($pageId, $groups['translatable']);
+            $groups['translatable'] = $this->appendTranslations($id, $groups['translatable']);
 
             // And unset numbers
             unset($groups[0], $groups[1]);
@@ -237,12 +237,11 @@ final class FieldService
     /**
      * Get attached category ids
      * 
-     * @param int $pageId
-     * @param array $relations
+     * @param int $id Entity id
      * @return array
      */
-    public function getAttachedCategories($pageId)
+    public function getAttachedCategories($id)
     {
-        return $this->fieldMapper->findAttachedSlaves($pageId);
+        return $this->fieldMapper->findAttachedSlaves($id);
     }
 }

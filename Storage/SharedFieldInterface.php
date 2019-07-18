@@ -22,15 +22,15 @@ interface SharedFieldInterface
     public function findActiveTranslations(array $fieldIds);
 
     /**
-     * Find field translation by associated page id
+     * Find field translation by associated entity id
      * 
-     * @param int $id Page id
+     * @param int $id Entity id
      * @return array
      */
-    public function findTranslationsByPageId($id);
+    public function findTranslationsByEntityId($id);
 
     /**
-     * Find attached fields by page id
+     * Find attached fields by entity id
      * 
      * @param int $id
      * @return array
@@ -40,17 +40,17 @@ interface SharedFieldInterface
     /**
      * Find attached category ids
      * 
-     * @param int $pageId Target page id
+     * @param int $id Target entity id
      * @return array
      */
-    public function findAttachedSlaves($pageId);
+    public function findAttachedSlaves($id);
 
     /**
      * Save junction relation
      * 
-     * @param int $pageId Target page id
+     * @param int $id Target entity id
      * @param array $slaveIds
      * @return boolean
      */
-    public function saveRelation($pageId, array $slaveIds);
+    public function saveRelation($id, array $slaveIds);
 }

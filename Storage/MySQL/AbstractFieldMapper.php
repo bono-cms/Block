@@ -49,7 +49,7 @@ abstract class AbstractFieldMapper extends AbstractMapper implements SharedField
     }
 
     /**
-     * Find attached fields by page id
+     * Find attached fields by entity id
      * 
      * @param int $id
      * @return array
@@ -77,7 +77,7 @@ abstract class AbstractFieldMapper extends AbstractMapper implements SharedField
                        ))
                        // Field value mapper
                        ->leftJoin(static::getTableName(), array(
-                            static::column('page_id') => static::getRawColumn('master_id', static::getRelationTable()),
+                            static::column('entity_id') => static::getRawColumn('master_id', static::getRelationTable()),
                             static::column('field_id') => CategoryFieldMapper::getRawColumn('id'),
                        ))
                        ->whereEquals(static::column('master_id', static::getRelationTable()), $id);
@@ -86,12 +86,12 @@ abstract class AbstractFieldMapper extends AbstractMapper implements SharedField
     }
 
     /**
-     * Find field translation by associated page id
+     * Find field translation by associated entity id
      * 
-     * @param int $id Page id
+     * @param int $id Entity id
      * @return array
      */
-    final public function findTranslationsByPageId($id)
+    final public function findTranslationsByEntityId($id)
     {
         // Columns to be selected
         $columns = array(
@@ -106,7 +106,7 @@ abstract class AbstractFieldMapper extends AbstractMapper implements SharedField
                        ->leftJoin(static::getTranslationTable(), array(
                             static::column('id', static::getTranslationTable()) => static::getRawColumn('id')
                        ))
-                       ->whereEquals(static::column('page_id'), $id);
+                       ->whereEquals(static::column('entity_id'), $id);
 
         return $db->queryAll();
     }
