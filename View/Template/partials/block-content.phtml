@@ -27,7 +27,7 @@ use Block\View\FieldMaker;
 
                 <?php foreach ($items as $item): ?>
                 <div class="form-group">
-                    <label class="col-lg-12 control-label"><?= $item['name']; ?></label>
+                    <label class="col-lg-12 control-label"><?= $item['name']; ?> <small class="text-muted">( ID = <?= $item['id']; ?> )</small></label>
 
                     <div class="col-lg-10">
                         <?= FieldMaker::makeRegularField($item['id'], $item['value'], $item['type']); ?>
@@ -51,7 +51,7 @@ use Block\View\FieldMaker;
 
                     <?php foreach ($items as $item): ?>
                     <div class="form-group">
-                        <label class="col-lg-12 control-label"><?= $item['name']; ?></label>
+                        <label class="col-lg-12 control-label"><?= $item['name']; ?> <small class="text-muted">( ID = <?= $item['id']; ?> )</small></label>
 
                         <div class="col-lg-10">
                             <?= FieldMaker::makeTranslatableField($item['id'], $language->getId(), $item['translations'][$language->getId()], $item['type']); ?>
