@@ -84,7 +84,8 @@ final class Block extends AbstractController
         $block = $this->getModuleService('blockManager')->fetchById($id, true);
 
         if ($block !== false) {
-            return $this->createForm($block, 'Edit the block');
+            $name = $this->getCurrentProperty($block, 'name');
+            return $this->createForm($block, $this->translator->translate('Edit the block "%s"', $name));
         } else {
             return false;
         }

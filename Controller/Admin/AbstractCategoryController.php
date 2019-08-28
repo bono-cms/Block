@@ -28,7 +28,7 @@ abstract class AbstractCategoryController extends AbstractController
     {
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@gridAction')
-                                       ->addOne($category->getId() ? 'Edit the category' : 'Add new category');
+                                       ->addOne($category->getId() ? $this->translator->translate('Edit the category "%s"', $category->getName()) : 'Add new category');
 
         $fTypeCol = new FieldTypeCollection();
 
