@@ -99,6 +99,7 @@ final class Block extends AbstractController
      */
     public function deleteAction($id)
     {
+        $historyService = $this->getService('Cms', 'historyManager');
         $service = $this->getModuleService('blockManager');
 
         // Batch removal
@@ -108,14 +109,22 @@ final class Block extends AbstractController
             $service->deleteByIds($ids);
             $this->flashBag->set('success', 'Selected elements have been removed successfully');
 
+            // Save in the history
+            $historyService->write('Block', 'Batch removal of %s blocks', count($ids));
+
         } else {
             $this->flashBag->set('warning', 'You should select at least one element to remove');
         }
 
         // Single removal
         if (!empty($id)) {
+            $block = $this->getModuleService('blockManager')->fetchById($id, false);
+
             $service->deleteById($id);
             $this->flashBag->set('success', 'Selected element has been removed successfully');
+
+            // Save in the history
+            $historyService->write('Block', 'Removed "%s" block', $block->getName());
         }
 
         return '1';
@@ -141,12 +150,17 @@ final class Block extends AbstractController
         ));
 
         if (1) {
+            $historyService = $this->getService('Cms', 'historyManager');
             $service = $this->getModuleService('blockManager');
+
+            $name = $input['name'];
 
             // Update
             if (!empty($input['id'])) {
                 if ($service->update($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
+
+                    $historyService->write('Block', 'Updated block "%s"', $name);
                     return '1';
                 }
 
@@ -154,6 +168,8 @@ final class Block extends AbstractController
                 // Create
                 if ($service->add($this->request->getPost())) {
                     $this->flashBag->set('success', 'The element has been created successfully');
+
+                    $historyService->write('Block', 'Added new block "%s"', $name);
                     return $service->getLastId();
                 }
             }

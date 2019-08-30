@@ -4,6 +4,7 @@ CHANGELOG
 1.3
 ---
 
+ * Moved history tracker of out main service into the main controller
  * Support complete internalization
  * Fixed issue with quote escaping
  * Added `renderAsArray()` in site service object

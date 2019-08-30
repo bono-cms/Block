@@ -27,35 +27,14 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     private $blockMapper;
 
     /**
-     * History manager to keep track
-     * 
-     * @var \Cms\Service\HistoryManagerInterface
-     */
-    private $historyManager;
-
-    /**
      * State initialization
      * 
      * @param \Block\Storage\BlockMapperInterface $blockMapper
-     * @param \Cms\Service\HistoryManagerInterface $historyManager
      * @return void
      */
-    public function __construct(BlockMapperInterface $blockMapper, HistoryManagerInterface $historyManager)
+    public function __construct(BlockMapperInterface $blockMapper)
     {
         $this->blockMapper = $blockMapper;
-        $this->historyManager = $historyManager;
-    }
-
-    /**
-     * Tracks activity
-     * 
-     * @param string $message
-     * @param string $placeholder
-     * @return boolean
-     */
-    private function track($message, $placeholder)
-    {
-        return $this->historyManager->write('HTML Blocks', $message, $placeholder);
     }
 
     /**
@@ -65,10 +44,10 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     {
         $entity = new VirtualEntity();
         $entity->setId($block['id'], VirtualEntity::FILTER_INT)
-            ->setLangId($block['lang_id'], VirtualEntity::FILTER_INT)
-            ->setName($block['name'], VirtualEntity::FILTER_HTML)
-            ->setClass($block['class'], VirtualEntity::FILTER_HTML)
-            ->setContent($block['content'], VirtualEntity::FILTER_SAFE_TAGS);
+               ->setLangId($block['lang_id'], VirtualEntity::FILTER_INT)
+               ->setName($block['name'], VirtualEntity::FILTER_HTML)
+               ->setClass($block['class'], VirtualEntity::FILTER_HTML)
+               ->setContent($block['content'], VirtualEntity::FILTER_SAFE_TAGS);
 
         return $entity;
     }
@@ -134,7 +113,6 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
      */
     public function add(array $input)
     {
-        #$this->track('Added new block "%s"', $input['name']);
         return $this->blockMapper->saveEntity($input['block'], $input['translation']);
     }
 
@@ -146,7 +124,6 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
      */
     public function update(array $input)
     {
-        #$this->track('Updated block "%s"', $input['name']);
         return $this->blockMapper->saveEntity($input['block'], $input['translation']);
     }
 
@@ -174,15 +151,7 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
      */
     public function deleteById($id)
     {
-        // Grab block's name before we fetch it
-        //$name = Filter::escape($this->blockMapper->fetchNameById($id));
-
-        if ($this->blockMapper->deleteEntity($id)) {
-            //$this->track('Removed "%s" block', $name);
-            return true;
-        } else {
-            return false;
-        }
+        return $this->blockMapper->deleteEntity($id);
     }
 
     /**
@@ -193,8 +162,6 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
      */
     public function deleteByIds(array $ids)
     {
-        $this->blockMapper->deleteEntity($ids);
-        // $this->track('Batch removal of %s blocks', count($ids));
-        return true;
+        return $this->blockMapper->deleteEntity($ids);
     }
 }

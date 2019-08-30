@@ -29,7 +29,7 @@ final class Module extends AbstractCmsModule
 
         return array(
             'siteService' => new SiteService($blockMapper),
-            'blockManager' => new BlockManager($blockMapper, $this->getHistoryManager()),
+            'blockManager' => new BlockManager($blockMapper),
             'categoryService' => new CategoryService($this->getMapper('/Block/Storage/MySQL/CategoryMapper')),
             'categoryFieldService' => new CategoryFieldService($this->getMapper('/Block/Storage/MySQL/CategoryFieldMapper')),
             'categoryRelationService' => new CategoryRelationService($this->getMapper('/Block/Storage/MySQL/CategoryRelationMapper'))
