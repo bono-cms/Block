@@ -15,9 +15,8 @@ use Cms\Service\AbstractManager;
 use Cms\Service\HistoryManagerInterface;
 use Block\Storage\BlockMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Security\Filter;
 
-final class BlockManager extends AbstractManager implements BlockManagerInterface
+final class BlockManager extends AbstractManager
 {
     /**
      * Any mapper which implements BlockMapperInterface
@@ -53,6 +52,16 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     }
 
     /**
+     * Returns prepared paginator instance
+     * 
+     * @return \Krystal\Paginate\Paginator
+     */
+    public function getPaginator()
+    {
+        return $this->blockMapper->getPaginator();
+    }
+
+    /**
      * Fetches a block by its associated class name
      * 
      * @param string $class
@@ -61,16 +70,6 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     public function fetchByClass($class)
     {
         return $this->blockMapper->fetchByClass($class);
-    }
-
-    /**
-     * Returns prepared paginator instance
-     * 
-     * @return \Krystal\Paginate\Paginator
-     */
-    public function getPaginator()
-    {
-        return $this->blockMapper->getPaginator();
     }
 
     /**
@@ -86,16 +85,6 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     }
 
     /**
-     * Returns last block's id
-     * 
-     * @return integer
-     */
-    public function getLastId()
-    {
-        return $this->blockMapper->getLastId();
-    }
-
-    /**
      * Fetches all block entities
      * 
      * @return array
@@ -103,28 +92,6 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     public function fetchAll()
     {
         return $this->prepareResults($this->blockMapper->fetchAll());
-    }
-
-    /**
-     * Adds a block
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function add(array $input)
-    {
-        return $this->blockMapper->saveEntity($input['block'], $input['translation']);
-    }
-
-    /**
-     * Updates a block
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function update(array $input)
-    {
-        return $this->blockMapper->saveEntity($input['block'], $input['translation']);
     }
 
     /**
@@ -144,24 +111,34 @@ final class BlockManager extends AbstractManager implements BlockManagerInterfac
     }
 
     /**
-     * Deletes a block by its associated id
+     * Returns last block's id
      * 
-     * @param string $id
-     * @return boolean
+     * @return integer
      */
-    public function deleteById($id)
+    public function getLastId()
     {
-        return $this->blockMapper->deleteEntity($id);
+        return $this->blockMapper->getLastId();
     }
 
     /**
-     * Delete blocks by their associated id
+     * Updates a block
      * 
-     * @param array $ids
+     * @param array $input Raw input data
      * @return boolean
      */
-    public function deleteByIds(array $ids)
+    public function save(array $input)
     {
-        return $this->blockMapper->deleteEntity($ids);
+        return $this->blockMapper->saveEntity($input['block'], $input['translation']);
+    }
+
+    /**
+     * Deletes a block by its associated id
+     * 
+     * @param string|array $id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        return $this->blockMapper->deleteEntity($id);
     }
 }

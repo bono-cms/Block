@@ -106,7 +106,7 @@ final class Block extends AbstractController
         if ($this->request->hasPost('batch')) {
             $ids = array_keys($this->request->getPost('batch'));
 
-            $service->deleteByIds($ids);
+            $service->delete($ids);
             $this->flashBag->set('success', 'Selected elements have been removed successfully');
 
             // Save in the history
@@ -120,7 +120,7 @@ final class Block extends AbstractController
         if (!empty($id)) {
             $block = $this->getModuleService('blockManager')->fetchById($id, false);
 
-            $service->deleteById($id);
+            $service->delete($id);
             $this->flashBag->set('success', 'Selected element has been removed successfully');
 
             // Save in the history
@@ -155,23 +155,22 @@ final class Block extends AbstractController
 
             $name = $input['name'];
 
+            // Save data
+            $service->save($this->request->getPost());
+
             // Update
             if (!empty($input['id'])) {
-                if ($service->update($this->request->getPost())) {
-                    $this->flashBag->set('success', 'The element has been updated successfully');
+                $this->flashBag->set('success', 'The element has been updated successfully');
 
-                    $historyService->write('Block', 'Updated block "%s"', $name);
-                    return '1';
-                }
+                $historyService->write('Block', 'Updated block "%s"', $name);
+                return '1';
 
             } else {
                 // Create
-                if ($service->add($this->request->getPost())) {
-                    $this->flashBag->set('success', 'The element has been created successfully');
+                $this->flashBag->set('success', 'The element has been created successfully');
 
-                    $historyService->write('Block', 'Added new block "%s"', $name);
-                    return $service->getLastId();
-                }
+                $historyService->write('Block', 'Added new block "%s"', $name);
+                return $service->getLastId();
             }
 
         } else {

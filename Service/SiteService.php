@@ -56,7 +56,6 @@ final class SiteService implements SiteServiceInterface
         $collection = explode("\r", $this->render($class));
 
         foreach ($collection as &$item) {
-
             if ($trim === true) {
                 $item = rtrim($item);
                 $item = ltrim($item);
