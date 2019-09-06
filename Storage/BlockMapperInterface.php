@@ -22,14 +22,6 @@ interface BlockMapperInterface
     public function fetchContentByClass($class);
 
     /**
-     * Fetches block name by its associated id
-     * 
-     * @param string $id
-     * @return string
-     */
-    public function fetchNameById($id);
-
-    /**
      * Fetches block data by its associated class name
      * 
      * @param string $class Block's class name

@@ -63,17 +63,6 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     }
 
     /**
-     * Fetches block name by its associated id
-     * 
-     * @param string $id
-     * @return string
-     */
-    public function fetchNameById($id)
-    {
-        return $this->findColumnByPk($id, 'name');
-    }
-
-    /**
      * Fetches block data by its associated class name
      * 
      * @param string $class Block's class name
