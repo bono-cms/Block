@@ -149,6 +149,39 @@ final class FieldService
     }
 
     /**
+     * Persist fields from request
+     * 
+     * @param string $group Group name
+     * @param array $request All request data
+     * @return boolean
+     */
+    public function persist($group, array $request)
+    {
+        // Fields with their values
+        $data = $request['data'];
+        $files = isset($request['files']['field']) ? $request['files']['field'] : array();
+
+        // Prepare variables
+        $field =& $data['field'];
+        $group = $data[$group];
+        $block = isset($data['block']) ? $data['block'] : array();
+        $translations = isset($field['translatable']) ? $field['translatable'] : array();
+        $new = !empty($data['page']['id']); // Whether its a new page
+
+        // Persist fields
+        if (isset($field['regular'])) {
+            $this->saveFields($group['id'], $field['regular'], $translations, $files);
+        }
+
+        // Save relation
+        if ($new) {
+            $this->saveRelation($group['id'], $block);
+        }
+
+        return true;
+    }
+
+    /**
      * Save fields
      * 
      * @param int $id Current entity id
@@ -157,7 +190,7 @@ final class FieldService
      * @param array $files Optional request files
      * @return boolean
      */
-    public function saveFields($id, array $fields, array $translations = array(), $files = array())
+    private function saveFields($id, array $fields, array $translations = array(), $files = array())
     {
         // Remove previous values
         $this->fieldMapper->deleteByColumn('entity_id', $id);
