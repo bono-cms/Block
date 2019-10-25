@@ -11,8 +11,11 @@
 
 namespace Block\Service;
 
+use RuntimeException;
 use Krystal\Stdlib\ArrayUtils;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Http\FileTransfer\FileUploader;
+use Krystal\Filesystem\FileManager;
 use Block\Storage\SharedFieldInterface;
 use Block\Collection\FieldTypeCollection;
 
@@ -21,6 +24,9 @@ use Block\Collection\FieldTypeCollection;
  */
 final class FieldService
 {
+    /* Shared constants */
+    const PARAM_UPLOAD_PATH = '/data/uploads/module/block';
+
     /**
      * An instance of mapper
      * 
@@ -29,14 +35,23 @@ final class FieldService
     private $fieldMapper;
 
     /**
+     * Path to document root
+     * 
+     * @var string
+     */
+    private $rootDir;
+
+    /**
      * State initialization
      * 
      * @param \Block\Storage\SharedFieldInterface $fieldMapper
+     * @param string $rootDir
      * @return void
      */
-    public function __construct(SharedFieldInterface $fieldMapper)
+    public function __construct(SharedFieldInterface $fieldMapper, $rootDir)
     {
         $this->fieldMapper = $fieldMapper;
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -88,19 +103,103 @@ final class FieldService
     }
 
     /**
-     * Save fields
+     * Persist fields from request
      * 
-     * @param int $entity Current entity id
-     * @param array $fields
-     * @param array $translations
+     * @param string $group Group name
+     * @param array $request All request data
      * @return boolean
      */
-    public function saveFields($id, array $fields, array $translations = array())
+    public function persist($group, array $request)
+    {
+        // Fields with their values
+        $data = $request['data'];
+        $files = isset($request['files']['field']) ? $request['files']['field'] : array();
+
+        // Prepare variables
+        $field =& $data['field'];
+        $group = $data[$group];
+        $block = isset($data['block']) ? $data['block'] : array();
+        $translations = isset($field['translatable']) ? $field['translatable'] : array();
+        $new = !empty($data['page']['id']); // Whether its a new page
+
+        // Persist fields
+        if (isset($field['regular'])) {
+            $this->saveFields($group['id'], $field['regular'], $translations, $files);
+        }
+
+        // Save relation
+        if ($new) {
+            $this->saveRelation($group['id'], $block);
+        }
+
+        return true;
+    }
+
+    /**
+     * Uploads a single file
+     * 
+     * @param int $id Entity id
+     * @param int $fieldId
+     * @param object $file File entity instance
+     * @return string|boolean
+     */
+    private function uploadFieldFile($id, $fieldId, $file)
+    {
+        // Upload current file
+        $uploader = new FileUploader();
+
+        // Target destination
+        $destination = sprintf('%s/%s/%s/', $this->rootDir . self::PARAM_UPLOAD_PATH, $id, $fieldId);
+        $path = self::PARAM_UPLOAD_PATH . '/' . $id . '/' . $fieldId . '/' . $file->getUniqueName();
+
+        // Upload a file first
+        if ($uploader->upload($destination, array($file))) {
+            return $path;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Remove file if possible
+     * 
+     * @param string $value Relative path to the file
+     * @return boolean
+     */
+    private function removeFileIfPossible($value)
+    {
+        try {
+            return FileManager::rmfile($this->rootDir . $value);
+        } catch (RuntimeException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Save fields
+     * 
+     * @param int $id Current entity id
+     * @param array $fields
+     * @param array $translations
+     * @param array $files Optional request files
+     * @return boolean
+     */
+    private function saveFields($id, array $fields, array $translations = array(), $files = array())
     {
         // Remove previous values
         $this->fieldMapper->deleteByColumn('entity_id', $id);
 
+        // Regular fields
         foreach ($fields as $fieldId => $value) {
+            // If current field is a file by its type, then do upload first
+            if (isset($files['regular'][$fieldId])) {
+                // Remove previous file if possible
+                $this->removeFileIfPossible($value);
+
+                $file =& $files['regular'][$fieldId];
+                $value = $this->uploadFieldFile($id, $fieldId, $file);
+            }
+
             $this->fieldMapper->persist(array(
                 'entity_id' => $id,
                 'field_id' => $fieldId,
@@ -114,7 +213,20 @@ final class FieldService
             $data = self::parseLocalizedInput($id, $translations);
 
             foreach ($data['options'] as $field) {
+                // Get all locales by field id
                 $locales = $data['translations'][$field['field_id']];
+
+                // If current field is a file by its type, then do upload first
+                foreach ($locales as &$locale) {
+                    if (isset($files['translatable'][$locale['lang_id']][$field['field_id']])) {
+                        // Remove previous file if possible
+                        $this->removeFileIfPossible($locale['value']);
+
+                        // Current file instance
+                        $file = $files['translatable'][$locale['lang_id']][$field['field_id']];
+                        $locale['value'] = $this->uploadFieldFile($id, $field['field_id'], $file);
+                    }
+                }
 
                 $this->fieldMapper->saveEntity($field, $locales);
             }
@@ -145,7 +257,7 @@ final class FieldService
             $translations = ArrayUtils::arrayList($this->fieldMapper->findActiveTranslations($fieldIds), 'field_id', 'value');
 
             // Start preparing data
-            foreach($rows as $row){
+            foreach ($rows as $row) {
                 // Special case to convert to boolean
                 if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN) {
                     $row['value'] = boolval($row['value']);
