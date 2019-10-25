@@ -14,7 +14,7 @@ defined('KRYSTAL') or die;
         <li role="presentation" class="nav-item active"><a class="nav-link" href="#category" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Category'); ?></a></li>
 
         <?php if ($category->getId()): ?>
-        <li role="presentation" class="nav-item"><a class="nav-link" href="#fields" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Fields'); ?></a></li>
+        <li role="presentation" class="nav-item"><a class="nav-link" href="#fields" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Fields'); ?> <small class="text-muted">(<?= count($fields); ?>)</small></a></li>
         <?php endif; ?>
     </ul>
 
