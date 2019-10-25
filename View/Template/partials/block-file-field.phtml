@@ -1,0 +1,16 @@
+<?php
+
+use Block\Collection\FieldTypeCollection;
+use Krystal\Filesystem\FileType;
+
+?>
+
+<?php if ($type == FieldTypeCollection::TYPE_FILE): ?>
+
+<?php if (FileType::isImage($value)): ?>
+<p><img class="img-fluid" src="<?= $value; ?>" /></p>
+<?php else: ?>
+<p><a target="_blank" href="<?= $value; ?>"><?php $this->show('View this file'); ?></a></p>
+<?php endif; ?>
+
+<?php endif; ?>

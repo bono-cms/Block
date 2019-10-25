@@ -30,6 +30,11 @@ use Block\View\FieldMaker;
                     <label class="col-lg-12 control-label"><?= $item['name']; ?> <small class="text-muted">( ID = <?= $item['id']; ?> )</small></label>
 
                     <div class="col-lg-10">
+                        <?php $this->loadPartial('block-file-field', array(
+                            'value' => $item['value'],
+                            'type' => $item['type']
+                        )); ?>
+
                         <?= FieldMaker::makeRegularField($item['id'], $item['value'], $item['type']); ?>
                     </div>
                 </div>
@@ -42,25 +47,29 @@ use Block\View\FieldMaker;
         <?php if (isset($fields['data']['translatable'])): ?>
         <?php foreach ($languages as $index => $language): ?>
         <div role="tabpanel" class="tab-pane" id="field-language-<?= $language->getId(); ?>">
-            <div>
-                <?php $this->loadPartial('language-name', array('language' => $language)); ?>
+            <?php $this->loadPartial('language-name', array('language' => $language)); ?>
 
-                <?php foreach ($fields['data']['translatable'] as $category => $items): ?>
-                  <fieldset>
-                    <legend class="container"><?= $category; ?></legend>
+            <?php foreach ($fields['data']['translatable'] as $category => $items): ?>
+              <fieldset>
+                <legend class="container"><?= $category; ?></legend>
 
-                    <?php foreach ($items as $item): ?>
-                    <div class="form-group">
-                        <label class="col-lg-12 control-label"><?= $item['name']; ?> <small class="text-muted">( ID = <?= $item['id']; ?> )</small></label>
+                <?php foreach ($items as $item): ?>
+                <?php $value = isset($item['translations'][$language->getId()]) ? $item['translations'][$language->getId()] : null; ?>
+                <div class="form-group">
+                    <label class="col-lg-12 control-label"><?= $item['name']; ?> <small class="text-muted">( ID = <?= $item['id']; ?> )</small></label>
 
-                        <div class="col-lg-10">
-                            <?= FieldMaker::makeTranslatableField($item['id'], $language->getId(), isset($item['translations'][$language->getId()]) ? $item['translations'][$language->getId()] : null, $item['type']); ?>
-                        </div>
+                    <div class="col-lg-10">
+                        <?php $this->loadPartial('block-file-field', array(
+                            'type' => $item['type'],
+                            'value' => $value
+                        )); ?>
+
+                        <?= FieldMaker::makeTranslatableField($item['id'], $language->getId(), $value, $item['type']); ?>
                     </div>
-                    <?php endforeach; ?>
-                  </fieldset>
+                </div>
                 <?php endforeach; ?>
-            </div>
+              </fieldset>
+            <?php endforeach; ?>
         </div>
         <?php endforeach; ?>            
         <?php endif; ?>
