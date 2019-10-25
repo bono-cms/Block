@@ -46,7 +46,9 @@ final class BlockManager extends AbstractManager
                ->setLangId($block['lang_id'], VirtualEntity::FILTER_INT)
                ->setName($block['name'], VirtualEntity::FILTER_HTML)
                ->setClass($block['class'], VirtualEntity::FILTER_HTML)
-               ->setContent($block['content'], VirtualEntity::FILTER_SAFE_TAGS);
+               ->setContent($block['content'], VirtualEntity::FILTER_SAFE_TAGS)
+               ->setValue($block['value'], VirtualEntity::FILTER_HTML)
+               ->setTranslatable($block['translatable'], VirtualEntity::FILTER_BOOL);
 
         return $entity;
     }
@@ -128,7 +130,9 @@ final class BlockManager extends AbstractManager
      */
     public function save(array $input)
     {
-        return $this->blockMapper->saveEntity($input['block'], $input['translation']);
+        $translation = isset($input['translation']) ? $input['translation'] : array();
+
+        return $this->blockMapper->saveEntity($input['block'], $translation);
     }
 
     /**

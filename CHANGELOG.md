@@ -4,6 +4,7 @@ CHANGELOG
 1.3
 ---
 
+ * Block items can now be both translatable and non-translatable
  * Moved history tracker of out main service into the main controller
  * Support complete internalization
  * Fixed issue with quote escaping

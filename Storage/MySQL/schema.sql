@@ -3,7 +3,9 @@ DROP TABLE IF EXISTS `bono_module_block`;
 CREATE TABLE `bono_module_block` (
 	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`name` varchar(255) NOT NULL,
-	`class` varchar(255) NOT NULL
+	`class` varchar(255) NOT NULL,
+    `translatable` BOOLEAN NOT NULL COMMENT 'Whether this field can have translations',
+    `value` TEXT NOT NULL
 ) DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_block_translations`;
