@@ -181,7 +181,7 @@ final class FieldService
                 'value' => $value
             ));
         }
-        
+
         // If there are no translatable fields, then save them
         if (!empty($translations)) {
             // Otherwise save with translatable fields
@@ -190,6 +190,19 @@ final class FieldService
             foreach ($data['options'] as $field) {
                 // Get all locales by field id
                 $locales = $data['translations'][$field['field_id']];
+
+                // If current field is a file by its type, then do upload first
+                foreach ($locales as &$locale) {
+                    if (isset($files['translatable'][$locale['lang_id']][$field['field_id']])) {
+                        // Current file instance
+                        $file = $files['translatable'][$locale['lang_id']][$field['field_id']];
+
+                        // Upload a file first
+                        if (self::uploadFile(self::createDestinationPath($id, $field['field_id']), $file)) {
+                            $locale['value'] = self::createValuePath($id, $fieldId, $file->getUniqueName());
+                        }
+                    }
+                }
 
                 $this->fieldMapper->saveEntity($field, $locales);
             }
