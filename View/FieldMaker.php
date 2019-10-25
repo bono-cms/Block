@@ -54,6 +54,9 @@ final class FieldMaker
     private static function makeField($name, $value, $type)
     {
         switch ($type) {
+            case FieldTypeCollection::TYPE_FILE:
+                return Element::hidden($name, $value) . Element::file($name, null, array('class' => 'form-control'));
+
             case FieldTypeCollection::TYPE_TEXT:
                 return Element::text($name, $value, array('class' => 'form-control'));
 
