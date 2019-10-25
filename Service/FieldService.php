@@ -13,6 +13,8 @@ namespace Block\Service;
 
 use Krystal\Stdlib\ArrayUtils;
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Http\FileTransfer\FileUploader;
+use Krystal\Filesystem\FileManager;
 use Block\Storage\SharedFieldInterface;
 use Block\Collection\FieldTypeCollection;
 
@@ -21,6 +23,9 @@ use Block\Collection\FieldTypeCollection;
  */
 final class FieldService
 {
+    /* Shared constants */
+    const PARAM_UPLOAD_PATH = '/data/uploads/module/block';
+
     /**
      * An instance of mapper
      * 
@@ -29,14 +34,23 @@ final class FieldService
     private $fieldMapper;
 
     /**
+     * Path to document root
+     * 
+     * @var string
+     */
+    private static $rootDir;
+
+    /**
      * State initialization
      * 
      * @param \Block\Storage\SharedFieldInterface $fieldMapper
+     * @param string $rootDir
      * @return void
      */
-    public function __construct(SharedFieldInterface $fieldMapper)
+    public function __construct(SharedFieldInterface $fieldMapper, $rootDir)
     {
         $this->fieldMapper = $fieldMapper;
+        self::$rootDir = $rootDir;
     }
 
     /**
@@ -88,32 +102,93 @@ final class FieldService
     }
 
     /**
+     * Uploads a file
+     * 
+     * @param string $destination Target directory file will be uploaded to
+     * @param mixed $file File bag instance
+     * @return boolean Depending on success
+     */
+    private static function uploadFile($destination, $file)
+    {
+        // Remove all previous files inside current directory, if any
+        if (is_dir($destination) && !FileManager::cleanDir($destination)) {
+            // If failed, then we don't have enough rights
+            return false;
+        }
+
+        // Upload current file
+        $uploader = new FileUploader();
+
+        // Attempt to upload
+        return $uploader->upload($destination, array($file));
+    }
+
+    /**
+     * Creates destination path for uploading
+     * 
+     * @param int $id Entity id
+     * @param int $fieldId Field id
+     * @return string
+     */
+    private static function createDestinationPath($id, $fieldId)
+    {
+        return self::$rootDir . self::PARAM_UPLOAD_PATH . '/' . $id . '/' . $fieldId . '/';
+    }
+
+    /**
+     * Creates relative path for a value
+     * 
+     * @param int $id Entity id
+     * @param int $fieldId Field id
+     * @param string $file
+     * @return string
+     */
+    private static function createValuePath($id, $fieldId, $file)
+    {
+        return self::PARAM_UPLOAD_PATH . '/' . $id . '/' . $fieldId . '/' . $file;
+    }
+
+    /**
      * Save fields
      * 
-     * @param int $entity Current entity id
+     * @param int $id Current entity id
      * @param array $fields
      * @param array $translations
+     * @param array $files Optional request files
      * @return boolean
      */
-    public function saveFields($id, array $fields, array $translations = array())
+    public function saveFields($id, array $fields, array $translations = array(), $files = array())
     {
         // Remove previous values
         $this->fieldMapper->deleteByColumn('entity_id', $id);
 
+        // Regular fields
         foreach ($fields as $fieldId => $value) {
+            // If current field is a file by its type, then do upload first
+            if (isset($files['regular'][$fieldId])) {
+                $file =& $files['regular'][$fieldId];
+                $destination = self::createDestinationPath($id, $fieldId);
+
+                if (self::uploadFile($destination, $file) !== false) {
+                    // Override value with relative path
+                    $value = self::createValuePath($id, $fieldId, $file->getUniqueName());
+                }
+            }
+
             $this->fieldMapper->persist(array(
                 'entity_id' => $id,
                 'field_id' => $fieldId,
                 'value' => $value
             ));
         }
-
+        
         // If there are no translatable fields, then save them
         if (!empty($translations)) {
             // Otherwise save with translatable fields
             $data = self::parseLocalizedInput($id, $translations);
 
             foreach ($data['options'] as $field) {
+                // Get all locales by field id
                 $locales = $data['translations'][$field['field_id']];
 
                 $this->fieldMapper->saveEntity($field, $locales);
