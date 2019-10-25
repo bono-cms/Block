@@ -11,6 +11,7 @@
 
 namespace Block\Service;
 
+use RuntimeException;
 use Krystal\Stdlib\ArrayUtils;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Http\FileTransfer\FileUploader;
@@ -160,6 +161,21 @@ final class FieldService
     }
 
     /**
+     * Remove file if possible
+     * 
+     * @param string $value Relative path to the file
+     * @return boolean
+     */
+    private function removeFileIfPossible($value)
+    {
+        try {
+            return FileManager::rmfile($this->rootDir . $value);
+        } catch (RuntimeException $e) {
+            return false;
+        }
+    }
+
+    /**
      * Save fields
      * 
      * @param int $id Current entity id
@@ -177,6 +193,9 @@ final class FieldService
         foreach ($fields as $fieldId => $value) {
             // If current field is a file by its type, then do upload first
             if (isset($files['regular'][$fieldId])) {
+                // Remove previous file if possible
+                $this->removeFileIfPossible($value);
+
                 $file =& $files['regular'][$fieldId];
                 $value = $this->uploadFieldFile($id, $fieldId, $file);
             }
@@ -200,6 +219,9 @@ final class FieldService
                 // If current field is a file by its type, then do upload first
                 foreach ($locales as &$locale) {
                     if (isset($files['translatable'][$locale['lang_id']][$field['field_id']])) {
+                        // Remove previous file if possible
+                        $this->removeFileIfPossible($locale['value']);
+
                         // Current file instance
                         $file = $files['translatable'][$locale['lang_id']][$field['field_id']];
                         $locale['value'] = $this->uploadFieldFile($id, $field['field_id'], $file);
