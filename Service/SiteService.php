@@ -41,7 +41,13 @@ final class SiteService implements SiteServiceInterface
      */
     public function render($class)
     {
-        return $this->blockMapper->fetchContentByClass($class);
+        $block = $this->blockMapper->fetchByClass($class);
+
+        if ($block) {
+            return boolval($block['translatable']) ? $block['content'] : $block['value'];
+        } else {
+            return null;
+        }
     }
 
     /**
