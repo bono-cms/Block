@@ -51,20 +51,6 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     }
 
     /**
-     * Fetches block's content by its associated class name
-     * 
-     * @param string $class
-     * @return string
-     */
-    public function fetchContentByClass($class)
-    {
-        return $this->createEntitySelect(array('content'))
-                    ->whereEquals('class', $class)
-                    ->andWhereEquals('lang_id', $this->getLangId())
-                    ->queryScalar();
-    }
-
-    /**
      * Fetches block data by its associated class name
      * 
      * @param string $class Block's class name
