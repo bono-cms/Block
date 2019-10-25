@@ -38,7 +38,7 @@ final class FieldService
      * 
      * @var string
      */
-    private static $rootDir;
+    private $rootDir;
 
     /**
      * State initialization
@@ -50,7 +50,7 @@ final class FieldService
     public function __construct(SharedFieldInterface $fieldMapper, $rootDir)
     {
         $this->fieldMapper = $fieldMapper;
-        self::$rootDir = $rootDir;
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -102,53 +102,6 @@ final class FieldService
     }
 
     /**
-     * Uploads a file
-     * 
-     * @param string $destination Target directory file will be uploaded to
-     * @param mixed $file File bag instance
-     * @return boolean Depending on success
-     */
-    private static function uploadFile($destination, $file)
-    {
-        // Remove all previous files inside current directory, if any
-        if (is_dir($destination) && !FileManager::cleanDir($destination)) {
-            // If failed, then we don't have enough rights
-            return false;
-        }
-
-        // Upload current file
-        $uploader = new FileUploader();
-
-        // Attempt to upload
-        return $uploader->upload($destination, array($file));
-    }
-
-    /**
-     * Creates destination path for uploading
-     * 
-     * @param int $id Entity id
-     * @param int $fieldId Field id
-     * @return string
-     */
-    private static function createDestinationPath($id, $fieldId)
-    {
-        return self::$rootDir . self::PARAM_UPLOAD_PATH . '/' . $id . '/' . $fieldId . '/';
-    }
-
-    /**
-     * Creates relative path for a value
-     * 
-     * @param int $id Entity id
-     * @param int $fieldId Field id
-     * @param string $file
-     * @return string
-     */
-    private static function createValuePath($id, $fieldId, $file)
-    {
-        return self::PARAM_UPLOAD_PATH . '/' . $id . '/' . $fieldId . '/' . $file;
-    }
-
-    /**
      * Persist fields from request
      * 
      * @param string $group Group name
@@ -182,6 +135,31 @@ final class FieldService
     }
 
     /**
+     * Uploads a single file
+     * 
+     * @param int $id Entity id
+     * @param int $fieldId
+     * @param object $file File entity instance
+     * @return string|boolean
+     */
+    private function uploadFieldFile($id, $fieldId, $file)
+    {
+        // Upload current file
+        $uploader = new FileUploader();
+
+        // Target destination
+        $destination = sprintf('%s/%s/%s/', $this->rootDir . self::PARAM_UPLOAD_PATH, $id, $fieldId);
+        $path = self::PARAM_UPLOAD_PATH . '/' . $id . '/' . $fieldId . '/' . $file->getUniqueName();
+
+        // Upload a file first
+        if ($uploader->upload($destination, array($file))) {
+            return $path;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Save fields
      * 
      * @param int $id Current entity id
@@ -200,12 +178,7 @@ final class FieldService
             // If current field is a file by its type, then do upload first
             if (isset($files['regular'][$fieldId])) {
                 $file =& $files['regular'][$fieldId];
-                $destination = self::createDestinationPath($id, $fieldId);
-
-                if (self::uploadFile($destination, $file) !== false) {
-                    // Override value with relative path
-                    $value = self::createValuePath($id, $fieldId, $file->getUniqueName());
-                }
+                $value = $this->uploadFieldFile($id, $fieldId, $file);
             }
 
             $this->fieldMapper->persist(array(
@@ -229,11 +202,7 @@ final class FieldService
                     if (isset($files['translatable'][$locale['lang_id']][$field['field_id']])) {
                         // Current file instance
                         $file = $files['translatable'][$locale['lang_id']][$field['field_id']];
-
-                        // Upload a file first
-                        if (self::uploadFile(self::createDestinationPath($id, $field['field_id']), $file)) {
-                            $locale['value'] = self::createValuePath($id, $fieldId, $file->getUniqueName());
-                        }
+                        $locale['value'] = $this->uploadFieldFile($id, $field['field_id'], $file);
                     }
                 }
 
@@ -266,7 +235,7 @@ final class FieldService
             $translations = ArrayUtils::arrayList($this->fieldMapper->findActiveTranslations($fieldIds), 'field_id', 'value');
 
             // Start preparing data
-            foreach($rows as $row){
+            foreach ($rows as $row) {
                 // Special case to convert to boolean
                 if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN) {
                     $row['value'] = boolval($row['value']);
