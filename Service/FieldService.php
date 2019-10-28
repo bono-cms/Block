@@ -309,7 +309,7 @@ final class FieldService
 
         return $raw;
     }
-    
+
     /**
      * Returns attached fields with their values
      * 
@@ -330,11 +330,13 @@ final class FieldService
             $groups = ArrayUtils::arrayPartition($rows, 'translatable', false);
 
             // Give them meaningful key names now
-            $groups['regular'] = $groups[0];
-            $groups['translatable'] = $groups[1];
+            $groups['regular'] = isset($groups[0]) ? $groups[0] : array();
+            $groups['translatable'] = isset($groups[1]) ? $groups[1] : array();
 
             // Append translations
-            $groups['translatable'] = $this->appendTranslations($id, $groups['translatable']);
+            if (!empty($groups['translatable'])) {
+                $groups['translatable'] = $this->appendTranslations($id, $groups['translatable']);
+            }
 
             // And unset numbers
             unset($groups[0], $groups[1]);
