@@ -7,11 +7,11 @@ use Block\View\FieldMaker;
 <?php if (!empty($fields)): ?>
 <div role="tabpanel" class="tab-pane" id="fields">
     <ul class="nav nav-tabs" role="tablist">
-        <?php if (isset($fields['data']['regular'])): ?>
+        <?php if (!empty($fields['data']['regular'])): ?>
         <li role="presentation" class="nav-item active"><a class="nav-link" href="#fields-main" role="tab" data-toggle="tab"><?php $this->show('Shared fields'); ?></a></li>
         <?php endif; ?>
 
-        <?php if (isset($fields['data']['translatable'])): ?>
+        <?php if (!empty($fields['data']['translatable'])): ?>
         <?php foreach ($languages as $index => $language): ?>
         <li role="presentation" class="nav-item"><a class="nav-link" href="#field-language-<?= $language->getId(); ?>" role="tab" data-toggle="tab"><?php $this->show('Fields'); ?> <small>(<?= $language->getName(); ?>)</small></a></li>
         <?php endforeach; ?>
