@@ -5,7 +5,7 @@ use Krystal\Filesystem\FileType;
 
 ?>
 
-<?php if ($type == FieldTypeCollection::TYPE_FILE): ?>
+<?php if ($type == FieldTypeCollection::TYPE_FILE && !empty($value)): ?>
 
 <?php if (FileType::isImage($value)): ?>
 <p><img class="img-fluid" src="<?= $value; ?>" /></p>
