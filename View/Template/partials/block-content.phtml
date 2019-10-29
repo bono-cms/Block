@@ -5,7 +5,7 @@ use Block\View\FieldMaker;
 ?>
 
 <?php if (!empty($fields)): ?>
-<div role="tabpanel" class="tab-pane" id="fields">
+<div role="tabpanel" class="tab-pane" id="block-fields">
     <ul class="nav nav-tabs" role="tablist">
         <?php if (!empty($fields['data']['regular'])): ?>
         <li role="presentation" class="nav-item active"><a class="nav-link" href="#fields-main" role="tab" data-toggle="tab"><?php $this->show('Shared fields'); ?></a></li>
