@@ -119,7 +119,6 @@ final class FieldService
         $field =& $data['field'];
         $group = $data[$group];
         $block = isset($data['block']) ? $data['block'] : array();
-        $new = !empty($data['page']['id']); // Whether its a new page
         $translations = isset($field['translatable']) ? $field['translatable'] : array();
         $regular = isset($field['regular']) ? $field['regular'] : array();
 
@@ -127,9 +126,7 @@ final class FieldService
         $this->saveFields($group['id'], $regular, $translations, $files);
 
         // Save relation
-        if ($new) {
-            $this->saveRelation($group['id'], $block);
-        }
+        $this->saveRelation($group['id'], $block);
 
         return true;
     }
