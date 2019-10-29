@@ -122,13 +122,8 @@ final class FieldService
         $translations = isset($field['translatable']) ? $field['translatable'] : array();
         $regular = isset($field['regular']) ? $field['regular'] : array();
 
-        // Persist fields
-        $this->saveFields($group['id'], $regular, $translations, $files);
-
-        // Save relation
-        $this->saveRelation($group['id'], $block);
-
-        return true;
+        // Persist fields and group relations
+        return $this->saveFields($group['id'], $regular, $translations, $files) && $this->saveRelation($group['id'], $block);
     }
 
     /**
