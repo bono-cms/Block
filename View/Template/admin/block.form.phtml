@@ -4,7 +4,7 @@ use Krystal\Form\Element;
 use Cms\Service\LanguageManager;
 defined('KRYSTAL') or die;
 
-$translatable = $block[0]->getTranslatable();
+$translatable = isset($block[0]) ? $block[0]->getTranslatable() : $block->getTranslatable();
 
 ?>
 
@@ -46,7 +46,7 @@ $translatable = $block[0]->getTranslatable();
             </div>
         </div>
         <?php else: ?>
-        <?php $entity = $block[0]; ?>
+        <?php $entity = isset($block[0]) ? $block[0] : $block; ?>
         <?php endif; ?>
 
         <div role="tabpanel" class="<?= $translatable ? 'tab-pane' : null; ?>" id="configuration">
