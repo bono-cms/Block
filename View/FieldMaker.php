@@ -54,6 +54,9 @@ final class FieldMaker
     private static function makeField($name, $value, $type)
     {
         switch ($type) {
+            case FieldTypeCollection::TYPE_WYSIWYG:
+                return Element::textarea($name, $value, array('class' => 'form-control', 'data-wysiwyg' => 'true'));
+
             case FieldTypeCollection::TYPE_FILE:
                 return Element::hidden($name, $value) . Element::file($name, null, array('class' => 'form-control'));
 
@@ -68,9 +71,6 @@ final class FieldMaker
 
             case FieldTypeCollection::TYPE_BOOLEAN:
                 return Element::checkbox($name, $value, array('class' => 'form-control'));
-
-            case FieldTypeCollection::TYPE_WYSIWYG:
-                return Element::textarea($name, $value, array('class' => 'form-control', 'data-wysiwyg' => 'true'));
         }
     }
 }
