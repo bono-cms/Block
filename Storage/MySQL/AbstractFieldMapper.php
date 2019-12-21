@@ -19,13 +19,6 @@ use Block\Storage\SharedFieldInterface;
 abstract class AbstractFieldMapper extends AbstractMapper implements SharedFieldInterface
 {
     /**
-     * Returns junction table name that connects entities with block categories
-     * 
-     * @return string
-     */
-    abstract public static function getRelationTable();
-
-    /**
      * Find attached category ids
      * 
      * @param int $id Target entity id
