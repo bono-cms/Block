@@ -107,10 +107,11 @@ abstract class AbstractFieldMapper extends AbstractMapper implements SharedField
     /**
      * Fetch active translation by field ids
      * 
-     * @param array $fieldIds
+     * @param array $fieldIds Attached field ids
+     * @param int $entityId Current entity id
      * @return array
      */
-    final public function findActiveTranslations(array $fieldIds)
+    final public function findActiveTranslations(array $fieldIds, $entityId)
     {
         // Columns to be selected
         $columns = array(
@@ -125,6 +126,7 @@ abstract class AbstractFieldMapper extends AbstractMapper implements SharedField
                             static::column('id', static::getTranslationTable()) => static::getRawColumn('id')
                        ))
                        ->whereIn(static::column('field_id'), $fieldIds)
+                       ->andWhereEquals(static::column('entity_id'), $entityId)
                        ->andWhereEquals(static::column('lang_id', static::getTranslationTable()), $this->getLangId());
 
         return $db->queryAll();

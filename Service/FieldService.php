@@ -245,7 +245,7 @@ final class FieldService
             $fieldIds = array_column($rows, 'id');
 
             // Find and normalize translations
-            $translations = ArrayUtils::arrayList($this->fieldMapper->findActiveTranslations($fieldIds), 'field_id', 'value');
+            $translations = ArrayUtils::arrayList($this->fieldMapper->findActiveTranslations($fieldIds, $id), 'field_id', 'value');
 
             // Start preparing data
             foreach ($rows as $row) {
