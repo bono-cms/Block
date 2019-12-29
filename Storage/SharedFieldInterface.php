@@ -20,7 +20,7 @@ interface SharedFieldInterface
      * @param int $entityId Current entity id
      * @return array
      */
-    final public function findActiveTranslations(array $fieldIds, $entityId);
+    public function findActiveTranslations(array $fieldIds, $entityId);
 
     /**
      * Find field translation by associated entity id
