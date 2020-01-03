@@ -152,8 +152,6 @@ final class Block extends AbstractController
             $historyService = $this->getService('Cms', 'historyManager');
             $service = $this->getModuleService('blockManager');
 
-            $name = $input['name'];
-
             // Save data
             $service->save($this->request->getPost());
 
@@ -161,14 +159,14 @@ final class Block extends AbstractController
             if (!empty($input['id'])) {
                 $this->flashBag->set('success', 'The element has been updated successfully');
 
-                $historyService->write('Block', 'Updated block "%s"', $name);
+                $historyService->write('Block', 'Updated block "%s"', $input['name']);
                 return '1';
 
             } else {
                 // Create
                 $this->flashBag->set('success', 'The element has been created successfully');
 
-                $historyService->write('Block', 'Added new block "%s"', $name);
+                $historyService->write('Block', 'Added new block "%s"', $input['name']);
                 return $service->getLastId();
             }
 
