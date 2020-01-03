@@ -64,13 +64,38 @@ final class Block extends AbstractController
     }
 
     /**
+     * Creates shared add form
+     * 
+     * @param boolean $translatable Whether this block is translatable
+     * @param string $title Page title
+     * @return string
+     */
+    private function createAddForm($translatable, $title)
+    {
+        $block = new VirtualEntity();
+        $block->setTranslatable($translatable);
+
+        return $this->createForm($block, $title);
+    }
+
+    /**
+     * Renders translatable form
+     * 
+     * @return string
+     */
+    public function addTranslatableAction()
+    {
+        return $this->createAddForm(true, 'Add new translatable block');
+    }
+
+    /**
      * Renders empty form
      * 
      * @return string
      */
     public function addAction()
     {
-        return $this->createForm(new VirtualEntity(), 'Add a block');
+        return $this->createAddForm(false, 'Add a block');
     }
 
     /**

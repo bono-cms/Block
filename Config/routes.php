@@ -27,6 +27,10 @@ return array(
         'controller' => 'Admin:Block@addAction'
     ),
     
+    '/%s/module/block/add-translatable' => array(
+        'controller' => 'Admin:Block@addTranslatableAction'
+    ),
+
     '/%s/module/block/edit/(:var)' => array(
         'controller' => 'Admin:Block@editAction'
     ),
