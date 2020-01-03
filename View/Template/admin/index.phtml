@@ -36,7 +36,7 @@ defined('KRYSTAL') or die;
 <?php endif; ?>
 
 <div class="row">
-    <div class="col-lg-7">
+    <div class="col-lg-6">
         <div class="card">
             <?php $this->loadPartial('items-per-page', array('caption' => 'HTML Blocks')); ?>
 
@@ -100,9 +100,9 @@ defined('KRYSTAL') or die;
         </div>
     </div>
 
-    <div class="col-lg-5">
+    <div class="col-lg-6">
         <div class="card">
-            <h2><i class="fas fa-tags"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h2>
+            <h2 class="mb-3"><i class="fas fa-tags"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h2>
 
             <?= $this->widget(new GridViewWidget($categories, array(
                 'pk' => 'id',
@@ -110,7 +110,10 @@ defined('KRYSTAL') or die;
                 'columns' => array(
                     array(
                         'column' => 'id',
-                        'label' => '#'
+                        'label' => '#',
+                        'attributes' => array(
+                            'class' => 'text-center text-muted'
+                        )
                     ),
 
                     array(
