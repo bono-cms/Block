@@ -143,13 +143,12 @@ final class Block extends AbstractController
             'input' => array(
                 'source' => $input,
                 'definition' => array(
-                    'name' => new Pattern\Name(),
-                    'content' => new Pattern\Content()
+                    'name' => new Pattern\Name()
                 )
             )
         ));
 
-        if (1) {
+        if ($formValidator->isValid()) {
             $historyService = $this->getService('Cms', 'historyManager');
             $service = $this->getModuleService('blockManager');
 
