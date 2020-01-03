@@ -27,7 +27,7 @@ abstract class AbstractCategoryController extends AbstractController
     final protected function createForm(VirtualEntity $category, VirtualEntity $field)
     {
         // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@gridAction')
+        $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@indexAction')
                                        ->addOne($category->getId() ? $this->translator->translate('Edit the category "%s"', $category->getName()) : 'Add new category');
 
         $fTypeCol = new FieldTypeCollection();
