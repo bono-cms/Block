@@ -51,6 +51,7 @@ $translatable = isset($block[0]) ? $block[0]->getTranslatable() : $block->getTra
 
         <div role="tabpanel" class="<?= $translatable ? 'tab-pane' : null; ?>" id="configuration">
             <?php echo Element::hidden('block[id]', $entity->getId()); ?>
+            <?php echo Element::hidden('block[translatable]', $entity->getTranslatable()); ?>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
@@ -70,13 +71,6 @@ $translatable = isset($block[0]) ? $block[0]->getTranslatable() : $block->getTra
                 </div>
             </div>
             <?php endif; ?>
-
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show('Translatable'); ?></label>
-                <div class="col-lg-10">
-                    <?php echo Element::checkbox('block[translatable]', $entity->getTranslatable()); ?>
-                </div>
-            </div>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php $this->show('Class'); ?></label>
