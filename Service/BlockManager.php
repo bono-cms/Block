@@ -14,7 +14,6 @@ namespace Block\Service;
 use Cms\Service\AbstractManager;
 use Cms\Service\HistoryManagerInterface;
 use Block\Storage\BlockMapperInterface;
-use Krystal\Stdlib\VirtualEntity;
 
 final class BlockManager extends AbstractManager
 {
@@ -41,14 +40,14 @@ final class BlockManager extends AbstractManager
      */
     protected function toEntity(array $block)
     {
-        $entity = new VirtualEntity();
-        $entity->setId($block['id'], VirtualEntity::FILTER_INT)
-               ->setLangId($block['lang_id'], VirtualEntity::FILTER_INT)
-               ->setName($block['name'], VirtualEntity::FILTER_HTML)
-               ->setClass($block['class'], VirtualEntity::FILTER_HTML)
-               ->setContent($block['content'], VirtualEntity::FILTER_SAFE_TAGS)
-               ->setValue($block['value'], VirtualEntity::FILTER_HTML)
-               ->setTranslatable($block['translatable'], VirtualEntity::FILTER_BOOL);
+        $entity = new BlockEntity();
+        $entity->setId($block['id'], BlockEntity::FILTER_INT)
+               ->setLangId($block['lang_id'], BlockEntity::FILTER_INT)
+               ->setName($block['name'], BlockEntity::FILTER_HTML)
+               ->setClass($block['class'], BlockEntity::FILTER_HTML)
+               ->setContent($block['content'], BlockEntity::FILTER_SAFE_TAGS)
+               ->setValue($block['value'], BlockEntity::FILTER_HTML)
+               ->setTranslatable($block['translatable'], BlockEntity::FILTER_BOOL);
 
         return $entity;
     }
