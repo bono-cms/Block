@@ -12,7 +12,7 @@ return array(
         'icon' => 'fas fa-otter fa-5x',
         'items' => array(
             array(
-                'route' => 'Block:Admin:Block@gridAction',
+                'route' => 'Block:Admin:Block@indexAction',
                 'name' => 'View all blocks'
             ),
             array(

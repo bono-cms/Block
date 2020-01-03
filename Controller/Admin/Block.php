@@ -23,7 +23,7 @@ final class Block extends AbstractController
      * @param integer $page Current page
      * @return string
      */
-    public function gridAction($page = 1)
+    public function indexAction($page = 1)
     {
         // Add a breadcrumb
         $this->view->getBreadcrumbBag()
@@ -32,9 +32,9 @@ final class Block extends AbstractController
         $blockManager = $this->getModuleService('blockManager');
 
         $paginator = $blockManager->getPaginator();
-        $paginator->setUrl($this->createUrl('Block:Admin:Block@gridAction', array(), 1));
+        $paginator->setUrl($this->createUrl('Block:Admin:Block@indexAction', array(), 1));
 
-        return $this->view->render('browser', array(
+        return $this->view->render('index', array(
             'blocks'    => $blockManager->fetchAllByPage($page, $this->getSharedPerPageCount()),
             'categories' => $this->getModuleService('categoryService')->fetchAll(),
             'paginator' => $paginator
@@ -55,7 +55,7 @@ final class Block extends AbstractController
                    ->appendScript('@Block/admin/block.form.js');
 
         // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@gridAction')
+        $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@indexAction')
                                        ->addOne($title);
 
         return $this->view->render('block.form', array(

@@ -11,11 +11,11 @@
 
 return array(
     '/%s/module/block' => array(
-        'controller' => 'Admin:Block@gridAction'
+        'controller' => 'Admin:Block@indexAction'
     ),
-    
+
     '/%s/module/block/page/(:var)' => array(
-        'controller' => 'Admin:Block@gridAction'
+        'controller' => 'Admin:Block@indexAction'
     ),
     
     '/%s/module/block/delete/(:var)' => array(
