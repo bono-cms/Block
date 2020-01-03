@@ -12,8 +12,15 @@ defined('KRYSTAL') or die;
 <div class="btn-toolbar">
     <?php $this->loadPartial('menu', array(
         'items' => array(
-            'Block:Admin:Block@addAction' => 'Add new block',
-            'Block:Admin:Category@addAction' => 'Add new category'
+            'Block:Admin:Block@addAction' => array(
+                'caption' => 'Add new block',
+                'icon' => 'fas fa-otter'
+            ),
+
+            'Block:Admin:Category@addAction' => array(
+                'caption' => 'Add new category',
+                'icon' => 'fas fa-tags'
+            )
         ),
         'actions' => array(
             'data' => $blocks,
@@ -37,11 +44,17 @@ defined('KRYSTAL') or die;
                         'columns' => array(
                             array(
                                 'column' => 'id',
-                                'label' => '#'
+                                'label' => '#',
+                                'attributes' => array(
+                                    'class' => 'text-center text-muted'
+                                )
                             ),
 
                             array(
                                 'column' => 'name',
+                                'attributes' => array(
+                                    'class' => null
+                                )
                             ),
 
                             array(
@@ -81,7 +94,7 @@ defined('KRYSTAL') or die;
 
     <div class="col-lg-5">
         <div class="card">
-            <h2><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h2>
+            <h2><i class="fas fa-tags"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h2>
 
             <?= $this->widget(new GridViewWidget($categories, array(
                 'pk' => 'id',
@@ -94,6 +107,9 @@ defined('KRYSTAL') or die;
 
                     array(
                         'column' => 'name',
+                        'attributes' => array(
+                            'class' => null
+                        )
                     ),
 
                     array(

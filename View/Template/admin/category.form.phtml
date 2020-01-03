@@ -11,7 +11,7 @@ defined('KRYSTAL') or die;
 
 <div class="card">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="nav-item active"><a class="nav-link" href="#category" role="tab" data-toggle="tab"><i class="fas fa-box-open"></i> <?php $this->show('Category'); ?></a></li>
+        <li role="presentation" class="nav-item active"><a class="nav-link" href="#category" role="tab" data-toggle="tab"><i class="fas fa-tags"></i> <?php $this->show('Category'); ?></a></li>
 
         <?php if ($category->getId()): ?>
         <li role="presentation" class="nav-item"><a class="nav-link" href="#fields" role="tab" data-toggle="tab"><i class="fas fa-tasks"></i> <?php $this->show('Fields'); ?> <small class="text-muted">(<?= count($fields); ?>)</small></a></li>
@@ -48,7 +48,7 @@ defined('KRYSTAL') or die;
         <div class="tab-pane fade in" id="fields" role="tabpanel">
             <div class="row">
                 <div class="col-lg-6">
-                    <h2><i class="glyphicon glyphicon-th-large"></i> <?php $this->show('Fields'); ?> <small>(<?= count($fields); ?>)</small></h2>
+                    <h2 class="mt-3 mb-4"><i class="fas fa-tasks"></i> <?php $this->show('Fields'); ?> <small>(<?= count($fields); ?>)</small></h2>
 
                     <?= $this->widget(new GridViewWidget($fields, array(
                         'pk' => 'id',
@@ -69,6 +69,9 @@ defined('KRYSTAL') or die;
 
                             array(
                                 'column' => 'name',
+                                'attributes' => array(
+                                    'class' => null
+                                )
                             ),
 
                             array(
@@ -103,7 +106,7 @@ defined('KRYSTAL') or die;
 
                 <div class="col-lg-6">
                     <form data-group="field" autocomplete="off">
-                        <h2><i class="glyphicon glyphicon-pencil"></i> <?php $this->show(!$field->getId() ? 'Add new field' : 'Edit the field'); ?></h2>
+                        <h2><i class="fas fa-pencil-alt"></i> <?php $this->show(!$field->getId() ? 'Add new field' : 'Edit the field'); ?></h2>
                         <br />
 
                         <?php echo Element::hidden('field[id]', $field->getId()); ?>

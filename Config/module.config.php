@@ -9,7 +9,7 @@ return array(
     'description' => 'HTML Blocks module allows you to dynamically handle HTML blocks',
     'menu' => array(
         'name' => 'HTML Blocks',
-        'icon' => 'fa fa-cubes fa-5x',
+        'icon' => 'fas fa-otter fa-5x',
         'items' => array(
             array(
                 'route' => 'Block:Admin:Block@gridAction',
