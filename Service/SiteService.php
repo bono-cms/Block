@@ -11,40 +11,38 @@
 
 namespace Block\Service;
 
-use Block\Storage\BlockMapperInterface;
-
 final class SiteService implements SiteServiceInterface
 {
     /**
      * Any compliant block mapper
      * 
-     * @var \Block\Storage\BlockMapperInterface
+     * @var \Block\Service\BlockManager $blockManager
      */
-    private $blockMapper;
+    private $blockManager;
 
     /**
      * State initialization
      * 
-     * @param \Block\Storage\BlockMapperInterface $blockMapper
+     * @param \Block\Service\BlockManager $blockManager
      * @return void
      */
-    public function __construct(BlockMapperInterface $blockMapper)
+    public function __construct(BlockManager $blockManager)
     {
-        $this->blockMapper = $blockMapper;
+        $this->blockManager = $blockManager;
     }
 
     /**
      * Renders a block
      * 
-     * @param string $class Block's class name
+     * @param int $id Block id
      * @return string
      */
-    public function render($class)
+    public function render($id)
     {
-        $block = $this->blockMapper->fetchByClass($class);
+        $block = $this->blockManager->fetchById($id, false);
 
         if ($block) {
-            return boolval($block['translatable']) ? $block['content'] : $block['value'];
+            return $block->getTranslatable() ? $block->getContent() : $block->getValue();
         } else {
             return null;
         }
@@ -53,21 +51,25 @@ final class SiteService implements SiteServiceInterface
     /**
      * Renders a text exploding it into array
      * 
-     * @param string $class
+     * @param int $id Block id
      * @param boolean $trim Whether to trim extra spaces
-     * @return array
+     * @return array|boolean
      */
-    public function renderAsArray($class, $trim = true)
+    public function renderAsArray($id, $trim = true)
     {
-        $collection = explode("\r", $this->render($class));
+        $collection = explode("\r", $this->render($id));
 
-        foreach ($collection as &$item) {
-            if ($trim === true) {
-                $item = rtrim($item);
-                $item = ltrim($item);
+        if ($collection !== null) {
+            foreach ($collection as &$item) {
+                if ($trim === true) {
+                    $item = rtrim($item);
+                    $item = ltrim($item);
+                }
             }
-        }
 
-        return $collection;
+            return $collection;
+        } else {
+            return false;
+        }
     }
 }

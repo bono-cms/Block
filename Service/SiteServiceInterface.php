@@ -16,17 +16,17 @@ interface SiteServiceInterface
     /**
      * Renders a block
      * 
-     * @param string $class Block's class name
+     * @param int $id Block id
      * @return string
      */
-    public function render($class);
+    public function render($id);
 
     /**
      * Renders a text exploding it into array
      * 
-     * @param string $class
+     * @param int $id Block id
      * @param boolean $trim Whether to trim extra spaces
-     * @return array
+     * @return array|boolean
      */
-    public function renderAsArray($class, $trim = true);
+    public function renderAsArray($id, $trim = true);
 }
