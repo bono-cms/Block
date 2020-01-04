@@ -50,16 +50,6 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     }
 
     /**
-     * Fetches all blocks
-     * 
-     * @return array
-     */
-    public function fetchAll()
-    {
-        return $this->fetchAllByPage(null, null);
-    }
-
-    /**
      * Fetches all blocks filtered by pagination
      * 
      * @param integer $page Current page

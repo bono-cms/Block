@@ -80,7 +80,7 @@ final class BlockManager extends AbstractManager
      */
     public function fetchAll()
     {
-        return $this->prepareResults($this->blockMapper->fetchAll());
+        return $this->fetchAllByPage(null, null);
     }
 
     /**
