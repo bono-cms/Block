@@ -14,14 +14,6 @@ namespace Block\Storage;
 interface BlockMapperInterface
 {
     /**
-     * Fetches block data by its associated class name
-     * 
-     * @param string $class Block's class name
-     * @return array
-     */
-    public function fetchByClass($class);
-
-    /**
      * Fetches all blocks
      * 
      * @return array
