@@ -62,17 +62,6 @@ final class BlockManager extends AbstractManager
     }
 
     /**
-     * Fetches a block by its associated class name
-     * 
-     * @param string $class
-     * @return \Krystal\Stdlib\VirtualEntity
-     */
-    public function fetchByClass($class)
-    {
-        return $this->blockMapper->fetchByClass($class);
-    }
-
-    /**
      * Fetches all block entities filtered by pagination
      * 
      * @param integer $page Current page
