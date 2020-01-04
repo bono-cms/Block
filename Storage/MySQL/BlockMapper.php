@@ -41,7 +41,6 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     {
         return array(
             self::column('id'),
-            self::column('class'),
             self::column('name'),
             self::column('translatable'),
             self::column('value'),

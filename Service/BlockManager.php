@@ -44,7 +44,6 @@ final class BlockManager extends AbstractManager
         $entity->setId($block['id'], BlockEntity::FILTER_INT)
                ->setLangId(isset($block['lang_id']) ? $block['lang_id'] : 0, BlockEntity::FILTER_INT)
                ->setName($block['name'], BlockEntity::FILTER_HTML)
-               ->setClass($block['class'], BlockEntity::FILTER_HTML)
                ->setContent(isset($block['content']) ? $block['content'] : null, BlockEntity::FILTER_SAFE_TAGS)
                ->setValue($block['value'], BlockEntity::FILTER_HTML)
                ->setTranslatable($block['translatable'], BlockEntity::FILTER_BOOL);
