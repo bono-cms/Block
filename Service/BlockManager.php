@@ -42,10 +42,10 @@ final class BlockManager extends AbstractManager
     {
         $entity = new BlockEntity();
         $entity->setId($block['id'], BlockEntity::FILTER_INT)
-               ->setLangId($block['lang_id'], BlockEntity::FILTER_INT)
+               ->setLangId(isset($block['lang_id']) ? $block['lang_id'] : 0, BlockEntity::FILTER_INT)
                ->setName($block['name'], BlockEntity::FILTER_HTML)
                ->setClass($block['class'], BlockEntity::FILTER_HTML)
-               ->setContent($block['content'], BlockEntity::FILTER_SAFE_TAGS)
+               ->setContent(isset($block['content']) ? $block['content'] : null, BlockEntity::FILTER_SAFE_TAGS)
                ->setValue($block['value'], BlockEntity::FILTER_HTML)
                ->setTranslatable($block['translatable'], BlockEntity::FILTER_BOOL);
 
@@ -107,7 +107,17 @@ final class BlockManager extends AbstractManager
         if ($withTranslations == true) {
             return $this->prepareResults($this->blockMapper->fetchById($id, true));
         } else {
-            return $this->prepareResult($this->blockMapper->fetchById($id, false));
+            // Special case, when internal method doesn't fetch translatable rows
+            $translatableBlock = $this->blockMapper->fetchById($id, false);
+
+            if ($translatableBlock) {
+                $block = $translatableBlock;
+            } else {
+                // Last chance to check whether this one is non-translatable
+                $block = $this->blockMapper->findByPk($id);
+            }
+
+            return $this->prepareResult($block);
         }
     }
 
