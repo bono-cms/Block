@@ -71,8 +71,7 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     public function fetchAll()
     {
-        return $this->createEntitySelect($this->getColumns())
-                    ->queryAll();
+        return $this->fetchAllByPage(null, null);
     }
 
     /**
@@ -84,15 +83,19 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     public function fetchAllByPage($page, $itemsPerPage)
     {
-        return $this->createEntitySelect($this->getColumns())
-                    ->whereEquals(
-                        BlockTranslationMapper::column('lang_id'), 
-                        $this->getLangId()
-                    )
+        $extraCondition = array(
+            BlockTranslationMapper::column('lang_id') => $this->getLangId()
+        );
+
+        $db = $this->createEntitySelect($this->getColumns(), null, $extraCondition)
                     ->orderBy(self::column('id'))
-                    ->desc()
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
+                    ->desc();
+
+        if ($page !== null && $itemsPerPage !== null){
+            $db->paginate($page, $itemsPerPage);
+        }
+
+        return $db->queryAll();
     }
 
     /**
