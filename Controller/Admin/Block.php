@@ -20,24 +20,23 @@ final class Block extends AbstractController
     /**
      * Renders a grid
      * 
-     * @param integer $page Current page
      * @return string
      */
-    public function indexAction($page = 1)
+    public function indexAction()
     {
+        // Current page number
+        $page = $this->request->getQuery('page', 1);
+
         // Add a breadcrumb
         $this->view->getBreadcrumbBag()
                    ->addOne('HTML Blocks');
 
         $blockManager = $this->getModuleService('blockManager');
 
-        $paginator = $blockManager->getPaginator();
-        $paginator->setUrl($this->createUrl('Block:Admin:Block@indexAction', array(), 1));
-
         return $this->view->render('index', array(
             'blocks'    => $blockManager->fetchAllByPage($page, $this->getSharedPerPageCount()),
             'categories' => $this->getModuleService('categoryService')->fetchAll(),
-            'paginator' => $paginator
+            'paginator' => $blockManager->getPaginator()
         ));
     }
 

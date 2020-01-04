@@ -14,10 +14,6 @@ return array(
         'controller' => 'Admin:Block@indexAction'
     ),
 
-    '/%s/module/block/page/(:var)' => array(
-        'controller' => 'Admin:Block@indexAction'
-    ),
-    
     '/%s/module/block/delete/(:var)' => array(
         'controller' => 'Admin:Block@deleteAction',
         'disallow' => array('guest')
