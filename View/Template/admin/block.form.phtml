@@ -71,16 +71,6 @@ $translatable = isset($block[0]) ? $block[0]->getTranslatable() : $block->getTra
                 </div>
             </div>
             <?php endif; ?>
-
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show('Class'); ?></label>
-                <div class="col-lg-10">
-                    <div class="input-group">
-                        <?php echo Element::text('block[class]', $entity->getClass(), array('class' => 'form-control', 'placeholder' => $this->translate("Class's name to simplify rendering"))); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

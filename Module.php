@@ -26,10 +26,11 @@ final class Module extends AbstractCmsModule
     public function getServiceProviders()
     {
         $blockMapper = $this->getMapper('/Block/Storage/MySQL/BlockMapper');
+        $blockManager = new BlockManager($blockMapper);
 
         return array(
-            'siteService' => new SiteService($blockMapper),
-            'blockManager' => new BlockManager($blockMapper),
+            'siteService' => new SiteService($blockManager),
+            'blockManager' => $blockManager,
             'categoryService' => new CategoryService($this->getMapper('/Block/Storage/MySQL/CategoryMapper')),
             'categoryFieldService' => new CategoryFieldService($this->getMapper('/Block/Storage/MySQL/CategoryFieldMapper')),
             'categoryRelationService' => new CategoryRelationService($this->getMapper('/Block/Storage/MySQL/CategoryRelationMapper'))

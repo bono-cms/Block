@@ -41,27 +41,12 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     {
         return array(
             self::column('id'),
-            self::column('class'),
             self::column('name'),
             self::column('translatable'),
             self::column('value'),
             BlockTranslationMapper::column('lang_id'),
             BlockTranslationMapper::column('content')
         );
-    }
-
-    /**
-     * Fetches block data by its associated class name
-     * 
-     * @param string $class Block's class name
-     * @return array
-     */
-    public function fetchByClass($class)
-    {
-        return $this->createEntitySelect($this->getColumns())
-                    ->whereEquals('class', $class)
-                    ->andWhereEquals('lang_id', $this->getLangId())
-                    ->query();
     }
 
     /**
