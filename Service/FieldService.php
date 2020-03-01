@@ -247,8 +247,8 @@ final class FieldService
             // Find and normalize translations
             $translations = ArrayUtils::arrayList($this->fieldMapper->findActiveTranslations($fieldIds, $id), 'field_id', 'value');
 
-            // Start preparing data
-            foreach ($rows as $row) {
+            // Shared row processor
+            $process = function(array $row){
                 // Special case to convert to boolean
                 if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN) {
                     $row['value'] = boolval($row['value']);
@@ -259,9 +259,18 @@ final class FieldService
                     $row['value'] = explode(PHP_EOL, $row['value']);
                 }
 
+                return $row;
+            };
+
+            // Start preparing data
+            foreach ($rows as $row) {
+                $row = $process($row);
+
                 // Override value from current language session, if translatable field encountered
                 if ($row['translatable'] == 1 && isset($translations[$row['id']])) {
                     $row['value'] = $translations[$row['id']];
+
+                    $row = $process($row);
                 }
 
                 $output[$row['id']] = $row['value'];
