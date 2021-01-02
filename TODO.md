@@ -3,6 +3,7 @@ TODO List
 =========
 
  * Write docs about connection to modules
+ * What about attributes in collections when iterating over result-set?
  * Add quick Copy & Paste when clicking on IDs
  * Add field hints
  * Can't remove uploaded files. Add checkbox to do that
