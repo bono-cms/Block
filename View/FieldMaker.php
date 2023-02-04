@@ -53,24 +53,28 @@ final class FieldMaker
      */
     private static function makeField($name, $value, $type)
     {
-        switch ($type) {
-            case FieldTypeCollection::TYPE_WYSIWYG:
-                return Element::textarea($name, $value, array('class' => 'form-control', 'data-wysiwyg' => 'true'));
+        if ($type == FieldTypeCollection::TYPE_WYSIWYG) {
+            return Element::textarea($name, $value, array('class' => 'form-control', 'data-wysiwyg' => 'true'));
+        }
 
-            case FieldTypeCollection::TYPE_FILE:
-                return Element::hidden($name, $value) . Element::file($name, null, array('class' => 'form-control'));
+        if ($type == FieldTypeCollection::TYPE_FILE) {
+            return Element::hidden($name, $value) . Element::file($name, null, array('class' => 'form-control'));
+        }
 
-            case FieldTypeCollection::TYPE_TEXT:
-                return Element::text($name, $value, array('class' => 'form-control'));
+        if ($type == FieldTypeCollection::TYPE_TEXT) {
+            return Element::text($name, $value, array('class' => 'form-control'));
+        }
 
-            case FieldTypeCollection::TYPE_TEXTAREA || FieldTypeCollection::TYPE_ARRAY:
-                return Element::textarea($name, $value, array('class' => 'form-control'));
+        if ($type == FieldTypeCollection::TYPE_TEXTAREA || $type == FieldTypeCollection::TYPE_ARRAY) {
+            return Element::textarea($name, $value, array('class' => 'form-control'));
+        }
 
-            case FieldTypeCollection::TYPE_NUMBER:
-                return Element::number($name, $value, array('class' => 'form-control'));
+        if ($type == FieldTypeCollection::TYPE_NUMBER) {
+            return Element::number($name, $value, array('class' => 'form-control'));
+        }
 
-            case FieldTypeCollection::TYPE_BOOLEAN:
-                return Element::checkbox($name, $value, array('class' => 'form-control'));
+        if ($type == FieldTypeCollection::TYPE_BOOLEAN) {
+            return Element::checkbox($name, $value, array('class' => 'form-control'));
         }
     }
 }
