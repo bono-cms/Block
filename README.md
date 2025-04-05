@@ -1,15 +1,22 @@
 Block module
-===========
+=====
 
-Your site might contain blocks that you want to make editable. Something of this would be a good example: footer, slogan, contact phone, email. This module is specially designed to handle that. It works like this - you create a new block and then render it somewhere in your theme template.
+Your site may include global content blocks that you want to make easily editable—such as a contact phone number, email address, or physical location. This module is specifically designed to handle such cases. It works like this: you create a new block and then render it wherever needed in your theme template.
 
-For API usage, please refer to its official documentation.
+## Availbale methods
 
-License
-======
+A predefined global service called `$block` is available in all templates. It provides the following methods:
 
-Licensed under GPL v2.
+    $block->render($id); // Returns the content of a block by its associated ID.
+    $block->renderAsArray($id); // Returns the block content as an array, where each line becomes a separate array element.
 
-# Credits
 
-Icons made by [srip](https://www.flaticon.com/authors/srip "srip") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon") is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/ "Creative Commons BY 3.0")
+## Example
+
+Rendering a global email address that can be edited from the administration panel.
+
+    <footer>
+      <div class="container">
+          <p>Our email: <?= $block->render(1); ?></p>
+      </div>
+    </footer>
