@@ -256,7 +256,7 @@ final class FieldService
 
                 // Turn a string into array, if required
                 if ($row['type'] == FieldTypeCollection::TYPE_ARRAY) {
-                    $row['value'] = explode(PHP_EOL, $row['value']);
+                    $row['value'] = isset($row['value']) ? explode(PHP_EOL, $row['value']) : null;
                 }
 
                 return $row;
