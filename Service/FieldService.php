@@ -107,9 +107,10 @@ final class FieldService
      * 
      * @param string $group Group name
      * @param array $request All request data
+     * @throws \RuntimeException if empty or missing primary key
      * @return boolean
      */
-    public function persist($group, array $request)
+    public function persist($groupName, array $request)
     {
         // Fields with their values
         $data = $request['data'];
@@ -117,10 +118,15 @@ final class FieldService
 
         // Prepare variables
         $field =& $data['field'];
-        $group = $data[$group];
+        $group = $data[$groupName];
         $block = isset($data['block']) ? $data['block'] : array();
         $translations = isset($field['translatable']) ? $field['translatable'] : array();
         $regular = isset($field['regular']) ? $field['regular'] : array();
+
+        // This is critical
+        if (empty($group['id'])) {
+            throw new RuntimeException('Missing or empty primary key');
+        }
 
         // Persist fields and group relations
         return $this->saveFields($group['id'], $regular, $translations, $files) && $this->saveRelation($group['id'], $block);
