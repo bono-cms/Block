@@ -16,7 +16,7 @@ use Krystal\Stdlib\VirtualEntity;
 final class Category extends AbstractCategoryController
 {
     /**
-     * Renders adding form
+     * Renders the add form
      * 
      * @return string
      */
@@ -26,7 +26,7 @@ final class Category extends AbstractCategoryController
     }
 
     /**
-     * Renders edit form
+     * Renders the edit form
      * 
      * @param int $id Category ID
      * @return mixed
@@ -46,17 +46,19 @@ final class Category extends AbstractCategoryController
     }
 
     /**
-     * Deletes a category ID
+     * Deletes a category by its ID
      * 
      * @param int $id Category ID
-     * @return int
+     * @return string
      */
     public function deleteAction($id)
     {
         $this->getModuleService('categoryService')->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-        return 1;
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -73,10 +75,14 @@ final class Category extends AbstractCategoryController
 
         if ($input['id']) {
             $this->flashBag->set('success', 'The element has been updated successfully');
-            return 1;
+            return $this->json([
+                'refresh' => true
+            ]);
         } else {
             $this->flashBag->set('success', 'The element has been created successfully');
-            return $categoryService->getLastId();
+            return $this->json([
+                'redirect' => $this->createUrl('Block:Admin:Category@editAction', [$categoryService->getLastId()]),
+            ]);
         }
     }
 }

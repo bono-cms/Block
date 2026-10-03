@@ -33,11 +33,11 @@ final class Block extends AbstractController
 
         $blockManager = $this->getModuleService('blockManager');
 
-        return $this->view->render('index', array(
-            'blocks'    => $blockManager->fetchAllByPage($page, $this->getSharedPerPageCount()),
+        return $this->view->render('index', [
+            'blocks'     => $blockManager->fetchAllByPage($page, $this->getSharedPerPageCount()),
             'categories' => $this->getModuleService('categoryService')->fetchAll(),
-            'paginator' => $blockManager->getPaginator()
-        ));
+            'paginator'  => $blockManager->getPaginator()
+        ]);
     }
 
     /**
@@ -55,15 +55,15 @@ final class Block extends AbstractController
 
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@indexAction')
-                                       ->addOne($title);
+                                     ->addOne($title);
 
-        return $this->view->render('block.form', array(
+        return $this->view->render('block.form', [
             'block' => $block
-        ));
+        ]);
     }
 
     /**
-     * Creates shared add form
+     * Creates a shared add form
      * 
      * @param boolean $translatable Whether this block is translatable
      * @param string $title Page title
@@ -78,7 +78,7 @@ final class Block extends AbstractController
     }
 
     /**
-     * Renders translatable form
+     * Renders a translatable form
      * 
      * @return string
      */
@@ -88,7 +88,7 @@ final class Block extends AbstractController
     }
 
     /**
-     * Renders empty form
+     * Renders an empty form
      * 
      * @return string
      */
@@ -98,7 +98,7 @@ final class Block extends AbstractController
     }
 
     /**
-     * Renders edit form
+     * Renders an edit form
      * 
      * @param string $id
      * @return string
@@ -116,7 +116,7 @@ final class Block extends AbstractController
     }
 
     /**
-     * Deletes a block by its associated id
+     * Deletes a block by its associated ID
      * 
      * @param string $id
      * @return string
@@ -151,7 +151,9 @@ final class Block extends AbstractController
             $historyService->write('Block', 'Removed "%s" block', $block->getName());
         }
 
-        return '1';
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -163,14 +165,14 @@ final class Block extends AbstractController
     {
         $input = $this->request->getPost('block');
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
+        $formValidator = $this->createValidator([
+            'input' => [
                 'source' => $input,
-                'definition' => array(
+                'definition' => [
                     'name' => new Pattern\Name()
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
 
         if ($formValidator->isValid()) {
             $historyService = $this->getService('Cms', 'historyManager');
@@ -184,14 +186,18 @@ final class Block extends AbstractController
                 $this->flashBag->set('success', 'The element has been updated successfully');
 
                 $historyService->write('Block', 'Updated block "%s"', $input['name']);
-                return '1';
+                return $this->json([
+                    'refresh' => true
+                ]);
 
             } else {
                 // Create
                 $this->flashBag->set('success', 'The element has been created successfully');
 
                 $historyService->write('Block', 'Added new block "%s"', $input['name']);
-                return $service->getLastId();
+                return $this->json([
+                    'redirect' => $this->createUrl('Block:Admin:Block@editAction', [$service->getLastId()]),
+                ]);
             }
 
         } else {

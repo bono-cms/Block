@@ -32,11 +32,11 @@ abstract class AbstractCategoryController extends AbstractController
 
         $fTypeCol = new FieldTypeCollection();
 
-        return $this->view->render('category.form', array(
+        return $this->view->render('category.form', [
             'category' => $category,
             'field' => $field,
             'fields' => $category->getId() ? $this->getModuleService('categoryFieldService')->fetchAll($category->getId()) : array(),
             'fieldTypes' => $fTypeCol->getAll()
-        ));
+        ]);
     }
 }
