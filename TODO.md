@@ -1,16 +1,18 @@
-
 TODO List
 =========
 
+ * When deleting a field it should redirect back to Block:Admin:Category@editAction, not refreshing a page
+ * Fix bug - can't upload files at the same time (in multi-languages)
  * Write docs about connection to modules
  * What about attributes in collections when iterating over result-set?
  * Add quick Copy & Paste when clicking on IDs
  * Add field hints
- * Can't remove uploaded files. Add checkbox to do that
- * Fix bug - can't upload files at the same time (in multi-languages)
+ * Can't remove uploaded files. Add checkbox to do that. Fix delete this file.
  * Implement some kind of field sorting
  * Optimize performance. Currently it queries a database on each `render()` call. It should should be optimized
  * Add optional filter by modules in categories
  * Repeatable groups
  * Add color picker
  * Add embed field
+ * Add fetchByIds()
+ * Make cacheable `render()` method
