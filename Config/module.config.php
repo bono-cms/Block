@@ -4,21 +4,21 @@
  * Module configuration container
  */
 
-return array(
+return [
     'name'  => 'Block',
     'description' => 'HTML Blocks module allows you to dynamically handle HTML blocks',
-    'menu' => array(
+    'menu' => [
         'name' => 'HTML Blocks',
         'icon' => 'fas fa-otter fa-5x',
-        'items' => array(
-            array(
+        'items' => [
+            [
                 'route' => 'Block:Admin:Block@indexAction',
                 'name' => 'View all blocks'
-            ),
-            array(
+            ],
+            [
                 'route' => 'Block:Admin:Block@addAction',
                 'name' => 'Add new block'
-            )
-        )
-    )
-);
+            ]
+        ]
+    ]
+];

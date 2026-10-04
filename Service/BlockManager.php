@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -65,7 +63,7 @@ final class BlockManager extends AbstractManager
      * Fetches all block entities filtered by pagination
      * 
      * @param integer $page Current page
-     * @param integer $itemsPerPage $itemsPerPage
+     * @param integer $itemsPerPage Items per page
      * @return array
      */
     public function fetchAllByPage($page, $itemsPerPage)
@@ -84,7 +82,7 @@ final class BlockManager extends AbstractManager
     }
 
     /**
-     * Fetches block's entity by its associated id
+     * Fetches block's entity by its associated ID
      * 
      * @param string $id
      * @param boolean $withTranslations Whether to fetch translations or not
@@ -95,7 +93,7 @@ final class BlockManager extends AbstractManager
         if ($withTranslations == true) {
             return $this->prepareResults($this->blockMapper->fetchById($id, true));
         } else {
-            // Special case, when internal method doesn't fetch translatable rows
+            // Special case when internal method doesn't fetch translatable rows
             $translatableBlock = $this->blockMapper->fetchById($id, false);
 
             if ($translatableBlock) {
@@ -110,7 +108,7 @@ final class BlockManager extends AbstractManager
     }
 
     /**
-     * Returns last block's id
+     * Returns last block's ID
      * 
      * @return integer
      */
@@ -127,13 +125,13 @@ final class BlockManager extends AbstractManager
      */
     public function save(array $input)
     {
-        $translation = isset($input['translation']) ? $input['translation'] : array();
+        $translation = isset($input['translation']) ? $input['translation'] : [];
 
         return $this->blockMapper->saveEntity($input['block'], $translation);
     }
 
     /**
-     * Deletes a block by its associated id
+     * Deletes a block by its associated ID
      * 
      * @param string|array $id
      * @return boolean

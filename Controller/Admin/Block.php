@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -13,7 +11,6 @@ namespace Block\Controller\Admin;
 
 use Cms\Controller\Admin\AbstractController;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Validate\Pattern;
 
 final class Block extends AbstractController
 {
@@ -34,9 +31,9 @@ final class Block extends AbstractController
         $blockManager = $this->getModuleService('blockManager');
 
         return $this->view->render('index', [
-            'blocks'     => $blockManager->fetchAllByPage($page, $this->getSharedPerPageCount()),
+            'blocks' => $blockManager->fetchAllByPage($page, $this->getSharedPerPageCount()),
             'categories' => $this->getModuleService('categoryService')->fetchAll(),
-            'paginator'  => $blockManager->getPaginator()
+            'paginator' => $blockManager->getPaginator()
         ]);
     }
 
@@ -49,13 +46,9 @@ final class Block extends AbstractController
      */
     private function createForm($block, $title)
     {
-        // Load view plugins
-        $this->view->getPluginBag()
-                   ->appendScript('@Block/admin/block.form.js');
-
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('HTML Blocks', 'Block:Admin:Block@indexAction')
-                                     ->addOne($title);
+                                       ->addOne($title);
 
         return $this->view->render('block.form', [
             'block' => $block
@@ -165,16 +158,12 @@ final class Block extends AbstractController
     {
         $input = $this->request->getPost('block');
 
-        $formValidator = $this->createValidator([
-            'input' => [
-                'source' => $input,
-                'definition' => [
-                    'name' => new Pattern\Name()
-                ]
-            ]
-        ]);
+        $validator = $this->createValidation();
 
-        if ($formValidator->isValid()) {
+        $validator->field('block.name')
+                  ->required();
+
+        if ($validator->isPassed()) {
             $historyService = $this->getService('Cms', 'historyManager');
             $service = $this->getModuleService('blockManager');
 
@@ -196,12 +185,14 @@ final class Block extends AbstractController
 
                 $historyService->write('Block', 'Added new block "%s"', $input['name']);
                 return $this->json([
-                    'redirect' => $this->createUrl('Block:Admin:Block@editAction', [$service->getLastId()]),
+                    'redirect' => $this->createUrl('Block:Admin:Block@editAction', [$service->getLastId()])
                 ]);
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -58,35 +56,51 @@ final class CategoryField extends AbstractCategoryController
      * Deletes category field
      * 
      * @param int $id Field ID
-     * @return int
+     * @return string
      */
     public function deleteAction($id)
     {
         $this->getModuleService('categoryFieldService')->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-        return 1;
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
      * Saves a field
      * 
-     * @return void
+     * @return string
      */
     public function saveAction()
     {
         $input = $this->request->getPost('field');
 
-        $categoryFieldService = $this->getModuleService('categoryFieldService');
-        $categoryFieldService->save($input);
+        $validator = $this->createValidation();
 
-        if ($input['id']) {
-            $this->flashBag->set('success', 'The element has been updated successfully');
-            return 1;
+        $validator->field('field.name')
+                  ->required();
+
+        if ($validator->isPassed()) {
+            $categoryFieldService = $this->getModuleService('categoryFieldService');
+            $categoryFieldService->save($input);
+
+            if ($input['id']) {
+                $this->flashBag->set('success', 'The element has been updated successfully');
+                return $this->json([
+                    'refresh' => true
+                ]);
+            } else {
+                $this->flashBag->set('success', 'The element has been created successfully');
+                return $this->json([
+                    'redirect' => $this->createUrl('Block:Admin:CategoryField@editAction', [$categoryFieldService->getLastId()])
+                ]);
+            }
         } else {
-
-            $this->flashBag->set('success', 'The element has been created successfully');
-            return $categoryFieldService->getLastId();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -33,18 +31,18 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     public function fetchAll()
     {
         // To be selected
-        $columns = array(
+        $columns = [
             self::column('id'),
             self::column('name')
-        );
+        ];
 
         $db = $this->db->select($columns)
                        ->count(CategoryFieldMapper::column('id'), 'field_count')
                        ->from(self::getTableName())
                        // Category field relation
-                       ->leftJoin(CategoryFieldMapper::getTableName(), array(
+                       ->leftJoin(CategoryFieldMapper::getTableName(), [
                             CategoryFieldMapper::column('category_id') => self::getRawColumn('id')
-                       ))
+                       ])
                        ->groupBy($columns)
                        ->orderBy('id')
                        ->desc();

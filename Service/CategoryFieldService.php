@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -51,7 +49,7 @@ final class CategoryFieldService extends AbstractManager
     }
 
     /**
-     * Deletes a field by its
+     * Deletes a field by its ID
      * 
      * @param int $id Field ID
      * @return boolean
@@ -83,7 +81,7 @@ final class CategoryFieldService extends AbstractManager
     }
 
     /**
-     * Fetch field by its ID
+     * Fetches a field by its ID
      * 
      * @param int $id Field ID
      * @return mixed
@@ -94,7 +92,7 @@ final class CategoryFieldService extends AbstractManager
     }
 
     /**
-     * Fetch all fields by attached category ID
+     * Fetches all fields by attached category ID
      * 
      * @param int $categoryId
      * @return array

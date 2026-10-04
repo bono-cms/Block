@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -69,21 +67,21 @@ final class FieldService
     /**
      * Parse input that contains translatable fields
      * 
-     * @param int $id Entity id
-     * @param array $translatable
+     * @param int $id Entity ID
+     * @param array $translations
      * @return array
      */
     private static function parseLocalizedInput($id, array $translations)
     {
-        $rows = $options = array();
+        $rows = $options = [];
 
         foreach ($translations as $langId => $data) {
-            foreach($data as $fieldId => $value) {
-                $rows[] = array(
+            foreach ($data as $fieldId => $value) {
+                $rows[] = [
                     'field_id' => $fieldId,
                     'lang_id' => $langId,
                     'value' => $value
-                );
+                ];
             }
         }
 
@@ -96,16 +94,16 @@ final class FieldService
             ];
         }
 
-        return array(
+        return [
             'options' => $options,
             'translations' => $localizations
-        );
+        ];
     }
 
     /**
      * Persist fields from request
      * 
-     * @param string $group Group name
+     * @param string $groupName Group name
      * @param array $request All request data
      * @throws \RuntimeException if empty or missing primary key
      * @return boolean
@@ -114,14 +112,14 @@ final class FieldService
     {
         // Fields with their values
         $data = $request['data'];
-        $files = isset($request['files']['field']) ? $request['files']['field'] : array();
+        $files = isset($request['files']['field']) ? $request['files']['field'] : [];
 
         // Prepare variables
         $field =& $data['field'];
         $group = $data[$groupName];
-        $block = isset($data['block']) ? $data['block'] : array();
-        $translations = isset($field['translatable']) ? $field['translatable'] : array();
-        $regular = isset($field['regular']) ? $field['regular'] : array();
+        $block = isset($data['block']) ? $data['block'] : [];
+        $translations = isset($field['translatable']) ? $field['translatable'] : [];
+        $regular = isset($field['regular']) ? $field['regular'] : [];
 
         // This is critical
         if (empty($group['id'])) {
@@ -135,7 +133,7 @@ final class FieldService
     /**
      * Uploads a single file
      * 
-     * @param int $id Entity id
+     * @param int $id Entity ID
      * @param int $fieldId
      * @param object $file File entity instance
      * @return string|boolean
@@ -150,7 +148,7 @@ final class FieldService
         $path = self::PARAM_UPLOAD_PATH . '/' . $id . '/' . $fieldId . '/' . $file->getUniqueName();
 
         // Upload a file first
-        if ($uploader->upload($destination, array($file))) {
+        if ($uploader->upload($destination, [$file])) {
             return $path;
         } else {
             return false;
@@ -175,13 +173,13 @@ final class FieldService
     /**
      * Save fields
      * 
-     * @param int $id Current entity id
+     * @param int $id Current entity ID
      * @param array $fields
      * @param array $translations
      * @param array $files Optional request files
      * @return boolean
      */
-    private function saveFields($id, array $fields, array $translations = array(), $files = array())
+    private function saveFields($id, array $fields, array $translations = [], $files = [])
     {
         // Remove previous values
         $this->fieldMapper->deleteByColumn('entity_id', $id);
@@ -197,11 +195,11 @@ final class FieldService
                 $value = $this->uploadFieldFile($id, $fieldId, $file);
             }
 
-            $this->fieldMapper->persist(array(
+            $this->fieldMapper->persist([
                 'entity_id' => $id,
                 'field_id' => $fieldId,
                 'value' => $value
-            ));
+            ]);
         }
 
         // If there are no translatable fields, then save them
@@ -210,7 +208,7 @@ final class FieldService
             $data = self::parseLocalizedInput($id, $translations);
 
             foreach ($data['options'] as $field) {
-                // Get all locales by field id
+                // Get all locales by field ID
                 $locales = $data['translations'][$field['field_id']];
 
                 // If current field is a file by its type, then do upload first
@@ -242,9 +240,9 @@ final class FieldService
     {
         $id = $entity->getId();
 
-        // If entity has id
+        // If entity has ID
         if ($id) {
-            $output = array();
+            $output = [];
             $rows = $this->fieldMapper->findFields($id);
 
             // Find translations
@@ -254,7 +252,7 @@ final class FieldService
             $translations = ArrayUtils::arrayList($this->fieldMapper->findActiveTranslations($fieldIds, $id), 'field_id', 'value');
 
             // Shared row processor
-            $process = function(array $row){
+            $process = function(array $row) {
                 // Special case to convert to boolean
                 if ($row['type'] == FieldTypeCollection::TYPE_BOOLEAN) {
                     $row['value'] = boolval($row['value']);
@@ -290,7 +288,7 @@ final class FieldService
     /**
      * Append field translations
      * 
-     * @param int $id Entity id
+     * @param int $id Entity ID
      * @param array $raw
      * @return array
      */
@@ -301,13 +299,12 @@ final class FieldService
 
         foreach ($raw as $index => $field) {
             foreach ($translations as $translation) {
-                
                 if ($translation['field_id'] == $field['id']) {
                     // Create if not created
                     if (!isset($raw[$index]['translations'])) {
-                        $raw[$index]['translations'] = array();
+                        $raw[$index]['translations'] = [];
                     }
-                    
+
                     $raw[$index]['translations'][$translation['lang_id']] = $translation['value'];
                 }
             }
@@ -319,7 +316,7 @@ final class FieldService
     /**
      * Returns attached fields with their values
      * 
-     * @param int $id Entity id
+     * @param int $id Entity ID
      * @return array
      */
     public function getFields($id)
@@ -336,8 +333,8 @@ final class FieldService
             $groups = ArrayUtils::arrayPartition($rows, 'translatable', false);
 
             // Give them meaningful key names now
-            $groups['regular'] = isset($groups[0]) ? $groups[0] : array();
-            $groups['translatable'] = isset($groups[1]) ? $groups[1] : array();
+            $groups['regular'] = isset($groups[0]) ? $groups[0] : [];
+            $groups['translatable'] = isset($groups[1]) ? $groups[1] : [];
 
             // Append translations
             if (!empty($groups['translatable'])) {
@@ -352,20 +349,19 @@ final class FieldService
                 $groups[$name] = ArrayUtils::arrayPartition($groups[$name], 'category', false);
             }
 
-            return array(
+            return [
                 'data' => $groups,
                 'count' => $count
-            );
-
+            ];
         } else {
-            return array();
+            return [];
         }
     }
 
     /**
-     * Get attached category ids
+     * Get attached category IDs
      * 
-     * @param int $id Entity id
+     * @param int $id Entity ID
      * @return array
      */
     public function getAttachedCategories($id)

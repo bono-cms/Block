@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -37,7 +35,7 @@ final class CategoryRelationService extends AbstractManager
     /**
      * Finds all records by page ID
      * 
-     * @param int $id Page id
+     * @param int $id Page ID
      * @return array
      */
     public function findAllByPageId($id)

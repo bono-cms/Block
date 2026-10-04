@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -70,18 +68,29 @@ final class Category extends AbstractCategoryController
     {
         $input = $this->request->getPost('category');
 
-        $categoryService = $this->getModuleService('categoryService');
-        $categoryService->save($input);
+        $validator = $this->createValidation();
 
-        if ($input['id']) {
-            $this->flashBag->set('success', 'The element has been updated successfully');
-            return $this->json([
-                'refresh' => true
-            ]);
+        $validator->field('category.name')
+                  ->required();
+
+        if ($validator->isPassed()) {
+            $categoryService = $this->getModuleService('categoryService');
+            $categoryService->save($input);
+
+            if ($input['id']) {
+                $this->flashBag->set('success', 'The element has been updated successfully');
+                return $this->json([
+                    'refresh' => true
+                ]);
+            } else {
+                $this->flashBag->set('success', 'The element has been created successfully');
+                return $this->json([
+                    'redirect' => $this->createUrl('Block:Admin:Category@editAction', [$categoryService->getLastId()])
+                ]);
+            }
         } else {
-            $this->flashBag->set('success', 'The element has been created successfully');
             return $this->json([
-                'redirect' => $this->createUrl('Block:Admin:Category@editAction', [$categoryService->getLastId()]),
+                'errors' => $validator->getErrors()
             ]);
         }
     }

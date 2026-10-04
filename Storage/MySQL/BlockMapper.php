@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -39,14 +37,14 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     private function getColumns()
     {
-        return array(
+        return [
             self::column('id'),
             self::column('name'),
             self::column('translatable'),
             self::column('value'),
             BlockTranslationMapper::column('lang_id'),
             BlockTranslationMapper::column('content')
-        );
+        ];
     }
 
     /**
@@ -58,15 +56,15 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
      */
     public function fetchAllByPage($page, $itemsPerPage)
     {
-        $extraCondition = array(
+        $extraCondition = [
             BlockTranslationMapper::column('lang_id') => $this->getLangId()
-        );
+        ];
 
         $db = $this->createEntitySelect($this->getColumns(), null, $extraCondition)
                     ->orderBy(self::column('id'))
                     ->desc();
 
-        if ($page !== null && $itemsPerPage !== null){
+        if ($page !== null && $itemsPerPage !== null) {
             $db->paginate($page, $itemsPerPage);
         }
 
@@ -74,9 +72,9 @@ final class BlockMapper extends AbstractMapper implements BlockMapperInterface
     }
 
     /**
-     * Fetches block data by its associated id
+     * Fetches block data by its associated ID
      * 
-     * @param string $id Block id
+     * @param string $id Block ID
      * @param boolean $withTranslations Whether to fetch translations or not
      * @return array
      */

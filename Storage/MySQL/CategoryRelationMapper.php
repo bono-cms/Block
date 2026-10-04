@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -27,30 +25,30 @@ final class CategoryRelationMapper extends AbstractMapper implements CategoryRel
     /**
      * Finds all fields by page ID
      * 
-     * @param int $id Page id
+     * @param int $id Page ID
      * @return array
      */
     public function findAllByPageId($id)
     {
         // Columns to be selected
-        $columns = array(
+        $columns = [
             CategoryFieldMapper::column('id') => 'field_id',
             CategoryRelationTranslationMapper::column('lang_id'),
             CategoryFieldMapper::column('name'),
             CategoryFieldMapper::column('type'),
             CategoryRelationTranslationMapper::column('value'),
-        );
+        ];
 
         $db = $this->db->select($columns)
                        ->from(CategoryFieldMapper::getTableName())
-                       ->join('LEFT', self::getTableName(), array(
+                       ->join('LEFT', self::getTableName(), [
                             CategoryFieldMapper::column('id') => self::getRawColumn('field_id'),
                             self::column('page_id') => (int) $id
-                       ))
+                       ])
                        // Translation relation
-                       ->leftJoin(CategoryRelationTranslationMapper::getTableName(), array(
+                       ->leftJoin(CategoryRelationTranslationMapper::getTableName(), [
                             CategoryRelationTranslationMapper::column('id') => CategoryFieldMapper::getRawColumn('id')
-                       ))
+                       ])
                        // Sort by latest
                        ->orderBy(self::column('id'))
                        ->desc();
