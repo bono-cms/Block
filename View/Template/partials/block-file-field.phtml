@@ -2,15 +2,18 @@
 
 use Block\Collection\FieldTypeCollection;
 use Krystal\Filesystem\FileType;
+use Krystal\Form\Element;
 
 ?>
 
 <?php if ($type == FieldTypeCollection::TYPE_FILE && !empty($value)): ?>
 
 <?php if (FileType::isImage($value)): ?>
-<p><img class="img-fluid" src="<?= $value; ?>" /></p>
+<p><img class="img-fluid" src="<?= $value ?>" /></p>
 <?php else: ?>
-<p><a target="_blank" href="<?= $value; ?>"><?php $this->show('View this file'); ?></a></p>
+<p><a target="_blank" href="<?= $value ?>"><?= $this->translate('View this file') ?></a></p>
 <?php endif; ?>
+
+<?= Element::checkbox(sprintf('delete[%s]', $id), false, [], false) ?> <?= $this->translate('Delete this file?') ?>
 
 <?php endif; ?>

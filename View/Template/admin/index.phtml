@@ -4,93 +4,91 @@ use Krystal\Form\Element;
 use Krystal\Widget\GridView\GridViewWidget;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
 <?php if ($extendedMode): ?>
 <div class="btn-toolbar">
-    <?php $this->loadPartial('menu', array(
-        'items' => array(
-            'Block:Admin:Block@addAction' => array(
+    <?php $this->loadPartial('menu', [
+        'items' => [
+            'Block:Admin:Block@addAction' => [
                 'caption' => 'Add new block',
                 'icon' => 'fas fa-otter'
-            ),
+            ],
 
-            'Block:Admin:Block@addTranslatableAction' => array(
+            'Block:Admin:Block@addTranslatableAction' => [
                 'caption' => 'Add new translatable block',
                 'icon' => 'fas fa-otter'
-            ),
+            ],
 
-            'Block:Admin:Category@addAction' => array(
+            'Block:Admin:Category@addAction' => [
                 'caption' => 'Add new category',
                 'icon' => 'fas fa-tags'
-            )
-        ),
-        'actions' => array(
+            ]
+        ],
+        'actions' => [
             'data' => $blocks,
             'delete' => 'Block:Admin:Block@deleteAction'
-        )
-    )); ?>
+        ]
+    ]); ?>
 </div>
 <?php endif; ?>
 
 <div class="row">
     <div class="col-lg-6">
         <div class="card">
-            <?php $this->loadPartial('items-per-page', array('caption' => 'HTML Blocks')); ?>
+            <?php $this->loadPartial('items-per-page', ['caption' => 'HTML Blocks']); ?>
 
             <form>
                 <div class="table-responsive">
-                    <?= $this->widget(new GridViewWidget($blocks, array(
+                    <?= $this->widget(new GridViewWidget($blocks, [
                         'pk' => 'id',
-                        'tableClass' => 'table table-hover table-bordered table-striped',
+                        'tableClass' => 'table table-hover table-bordered table-striped align-middle',
                         'batch' => $extendedMode,
-                        'columns' => array(
-                            array(
+                        'columns' => [
+                            [
                                 'column' => 'id',
                                 'label' => '#',
-                                'attributes' => array(
+                                'attributes' => [
                                     'class' => 'text-center text-muted'
-                                )
-                            ),
+                                ]
+                            ],
 
-                            array(
+                            [
                                 'column' => 'name',
-                                'attributes' => array(
+                                'attributes' => [
                                     'class' => null
-                                )
-                            ),
+                                ]
+                            ],
 
-                            array(
+                            [
                                 'column' => 'translatable',
                                 'translateable' => true,
-                                'value' => function($row){
+                                'value' => function ($row) {
                                     return boolval($row['translatable']) ? 'Yes' : 'No';
                                 }
-                            ),
-                        ),
+                            ],
+                        ],
 
-                        'actions' => array(
-                            'edit' => function($row){
+                        'actions' => [
+                            function ($row) {
                                 return Icon::edit(
                                     $this->url('Block:Admin:Block@editAction', $row['id']),
                                     $this->translate('Edit this block')
                                 );
                             },
 
-                            'remove' => $extendedMode ? function($row){
+                            $extendedMode ? function ($row) {
                                 return Icon::remove(
                                     $this->url('Block:Admin:Block@deleteAction', $row['id']),
                                     $this->translate('Remove this block')
                                 );
                             } : null
-                        )
-                    ))); ?>
+                        ]
+                    ])); ?>
 
                     <?php if (empty($blocks)): ?>
-                    <div class="center-block">
-                        <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No blocks'); ?></h2>
+                    <div class="text-center my-4">
+                        <h2 class="text-center text-muted"><i class="bi bi-x-circle"></i> <?= $this->translate('No blocks') ?></h2>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -102,50 +100,49 @@ defined('KRYSTAL') or die;
 
     <div class="col-lg-6">
         <div class="card">
-            <h2 class="mb-3"><i class="fas fa-tags"></i> <?php $this->show('Categories'); ?> <small>(<?= count($categories); ?>)</small></h2>
+            <h2 class="mb-3"><i class="fas fa-tags"></i> <?= $this->translate('Categories') ?> <small>(<?= count($categories) ?>)</small></h2>
 
-            <?= $this->widget(new GridViewWidget($categories, array(
+            <?= $this->widget(new GridViewWidget($categories, [
                 'pk' => 'id',
-                'tableClass' => 'table table-hover table-bordered table-striped',
-                'columns' => array(
-                    array(
+                'tableClass' => 'table table-hover table-bordered table-striped align-middle',
+                'columns' => [
+                    [
                         'column' => 'id',
                         'label' => '#',
-                        'attributes' => array(
+                        'attributes' => [
                             'class' => 'text-center text-muted'
-                        )
-                    ),
+                        ]
+                    ],
 
-                    array(
+                    [
                         'column' => 'name',
-                        'attributes' => array(
+                        'attributes' => [
                             'class' => null
-                        )
-                    ),
+                        ]
+                    ],
 
-                    array(
+                    [
                         'column' => 'field_count',
                         'label' => 'Field count'
-                    )
-                ),
+                    ]
+                ],
 
-                'actions' => array(
-                    'edit' => function($row){
+                'actions' => [
+                    function ($row) {
                         return Icon::edit(
                             $this->url('Block:Admin:Category@editAction', $row['id']),
                             $this->translate('Edit this category')
                         );
                     },
 
-                    'remove' => function($row){
+                    function ($row) {
                         return Icon::remove(
                             $this->url('Block:Admin:Category@deleteAction', $row['id']),
                             $this->translate('Remove this category')
                         );
                     }
-                )
-            ))); ?>
+                ]
+            ])); ?>
         </div>
     </div>
 </div>
-

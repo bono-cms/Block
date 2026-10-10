@@ -72,7 +72,7 @@ final class FieldMaker
         }
 
         if ($type == FieldTypeCollection::TYPE_BOOLEAN) {
-            return Element::checkbox($name, $value, ['class' => 'form-control']);
+            return Element::checkbox($name, $value, ['class' => 'form-check-input']);
         }
     }
 }

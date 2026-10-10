@@ -5,102 +5,104 @@ use Krystal\Form\Element;
 use Block\Collection\FieldTypeCollection;
 use Cms\View\Icon;
 
-defined('KRYSTAL') or die;
-
 ?>
 
 <div class="card">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="nav-item active"><a class="nav-link" href="#category" role="tab" data-toggle="tab"><i class="fas fa-tags"></i> <?php $this->show('Category'); ?></a></li>
+        <li role="presentation" class="nav-item">
+            <a class="nav-link active" href="#category" role="tab" data-bs-toggle="tab"><i class="fas fa-tags"></i> <?= $this->translate('Category') ?></a>
+        </li>
 
         <?php if ($category->getId()): ?>
-        <li role="presentation" class="nav-item"><a class="nav-link" href="#fields" role="tab" data-toggle="tab"><i class="fas fa-tasks"></i> <?php $this->show('Fields'); ?> <small class="text-muted">(<?= count($fields); ?>)</small></a></li>
+        <li role="presentation" class="nav-item">
+            <a class="nav-link" href="#fields" role="tab" data-bs-toggle="tab"><i class="fas fa-tasks"></i> <?= $this->translate('Fields') ?> <small class="text-muted">(<?= count($fields) ?>)</small></a>
+        </li>
         <?php endif; ?>
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane fade in active" id="category" role="tabpanel">
-            <form data-group="category" autocomplete="off">
-                <?php echo Element::hidden('category[id]', $category->getId()); ?>
+        <div class="tab-pane fade show active" id="category" role="tabpanel">
+            <form autocomplete="off">
+                <?= Element::hidden('category[id]', $category->getId()) ?>
 
-                <div class="form-group">
-                    <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
+                <div class="mb-3 row">
+                    <label class="col-lg-2 col-form-label"><?= $this->translate('Name') ?></label>
                     <div class="col-lg-10">
                         <div class="input-group">
-                            <?php echo Element::text('category[name]', $category->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Category name'))); ?>
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                            <?= Element::text('category[name]', $category->getName(), ['class' => 'form-control', 'placeholder' => $this->translate('Category name')]) ?>
+                            <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                         </div>
                     </div>
                 </div>
 
-                <?php $this->loadPartial('actions', array(
+                <?php $this->loadPartial('actions', [
                     'new' => !$category->getId(),
                     'add' => 'Block:Admin:Category@addAction',
                     'edit' => 'Block:Admin:Category@editAction',
                     'save' => 'Block:Admin:Category@saveAction',
                     'cancel' => 'Block:Admin:Block@indexAction'
-                )); ?>
+                ]); ?>
 
-            </form>                
+            </form>
         </div>
 
         <?php if ($category->getId()): ?>
-        <div class="tab-pane fade in" id="fields" role="tabpanel">
+        <div class="tab-pane fade" id="fields" role="tabpanel">
             <div class="row">
                 <div class="col-lg-6">
-                    <h2 class="mt-3 mb-4"><i class="fas fa-tasks"></i> <?php $this->show('Fields'); ?> <small>(<?= count($fields); ?>)</small></h2>
+                    <h2 class="mt-3 mb-4"><i class="fas fa-tasks"></i> <?= $this->translate('Fields') ?> <small>(<?= count($fields) ?>)</small></h2>
 
-                    <?= $this->widget(new GridViewWidget($fields, array(
+                    <?= $this->widget(new GridViewWidget($fields, [
                         'pk' => 'id',
-                        'tableClass' => 'table table-hover table-bordered table-striped',
-                        'rowAttributes' => array(
-                            'class' => function($row) use ($field){
+                        'tableClass' => 'table table-hover table-bordered table-striped align-middle',
+                        'rowAttributes' => [
+                            'class' => function ($row) use ($field) {
                                 if ($row->getId() == $field->getId()) {
                                     return 'table-info';
                                 }
                             }
-                        ),
+                        ],
 
-                        'columns' => array(
-                            array(
+                        'columns' => [
+                            [
                                 'column' => 'id',
                                 'label' => '#'
-                            ),
+                            ],
 
-                            array(
+                            [
                                 'column' => 'name',
-                                'attributes' => array(
+                                'attributes' => [
                                     'class' => null
-                                )
-                            ),
+                                ]
+                            ],
 
-                            array(
+                            [
                                 'column' => 'type',
                                 'translateable' => true,
-                                'value' => function($row){
+                                'value' => function ($row) {
                                     $fTypeCol = new FieldTypeCollection();
                                     return $fTypeCol->findByKey($row->getType());
                                 }
-                            ),
+                            ],
 
-                            array(
+                            [
                                 'column' => 'translatable',
                                 'translateable' => true,
-                                'value' => function($row){
+                                'value' => function ($row) {
                                     return $row['translatable'] == 1 ? 'Yes' : 'No';
                                 }
-                            ),
-                        ),
+                            ],
+                        ],
 
-                        'actions' => array(
-                            'edit' => function($row){
+                        'actions' => [
+                            function ($row) {
                                 return Icon::edit(
                                     $this->url('Block:Admin:CategoryField@editAction', $row['id']),
                                     $this->translate('Edit this category')
                                 );
                             },
 
-                            'remove' => function($row){
+                            function ($row) {
                                 return Icon::remove(
                                     $this->url('Block:Admin:CategoryField@deleteAction', $row['id']),
                                     $this->translate('Remove this category'),
@@ -108,54 +110,54 @@ defined('KRYSTAL') or die;
                                     $this->url('Block:Admin:Category@editAction', $row['category_id'])
                                 );
                             }
-                        )
-                    ))); ?>
+                        ]
+                    ])); ?>
                 </div>
 
                 <div class="col-lg-6">
-                    <form data-group="field" autocomplete="off">
-                        <h2><i class="fas fa-pencil-alt"></i> <?php $this->show(!$field->getId() ? 'Add new field' : 'Edit the field'); ?></h2>
+                    <form autocomplete="off">
+                        <h2><i class="fas fa-pencil-alt"></i> <?= $this->translate(!$field->getId() ? 'Add new field' : 'Edit the field') ?></h2>
                         <br />
 
-                        <?php echo Element::hidden('field[id]', $field->getId()); ?>
-                        <?php echo Element::hidden('field[category_id]', $category->getId()); ?>
+                        <?= Element::hidden('field[id]', $field->getId()) ?>
+                        <?= Element::hidden('field[category_id]', $category->getId()) ?>
 
-                        <div class="form-group">
-                            <label class="col-lg-12 control-label"><?php $this->show('Name'); ?></label>
+                        <div class="mb-3 row">
+                            <label class="col-lg-12 col-form-label"><?= $this->translate('Name') ?></label>
                             <div class="col-lg-10">
                                 <div class="input-group">
-                                    <?php echo Element::textarea('field[name]', $field->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Field name'))); ?>
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <?= Element::textarea('field[name]', $field->getName(), ['class' => 'form-control', 'placeholder' => $this->translate('Field name')]) ?>
+                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-lg-12 control-label"><?php $this->show('Type'); ?></label>
+                        <div class="mb-3 row">
+                            <label class="col-lg-12 col-form-label"><?= $this->translate('Type') ?></label>
                             <div class="col-lg-10">
                                 <div class="input-group">
-                                    <?php echo Element::select('field[type]', $this->translateArray($fieldTypes), $field->getType(), array('class' => 'form-control')); ?>
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    <?= Element::select('field[type]', $this->translateArray($fieldTypes), $field->getType(), ['class' => 'form-select']) ?>
+                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-lg-12 control-label"><?php $this->show('Translatable'); ?></label>
+                        <div class="mb-3 row">
+                            <label class="col-lg-12 col-form-label"><?= $this->translate('Translatable') ?></label>
                             <div class="col-lg-10">
-                                <?php echo Element::checkbox('field[translatable]', $field->getTranslatable()); ?>
+                                <?= Element::checkbox('field[translatable]', $field->getTranslatable()) ?>
                             </div>
                         </div>
 
-                        <?php $this->loadPartial('actions', array(
+                        <?php $this->loadPartial('actions', [
                             'new' => !$field->getId(),
-                            'add' => array($this->url('Block:Admin:CategoryField@addAction', $category->getId())),
-                            'edit' => array($this->url('Block:Admin:CategoryField@editAction', '')),
+                            'add' => [$this->url('Block:Admin:CategoryField@addAction', $category->getId())],
+                            'edit' => [$this->url('Block:Admin:CategoryField@editAction', '')],
                             'save' => 'Block:Admin:CategoryField@saveAction',
                             'cancel' => 'Block:Admin:Block@indexAction'
-                        )); ?>
+                        ]); ?>
 
-                    </form>                                   
+                    </form>
                 </div>
             </div>
         </div>
